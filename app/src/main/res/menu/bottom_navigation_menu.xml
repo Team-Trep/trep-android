@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/feedFragment"
+        android:title="@string/bottom_nav_item_feed">
+    </item>
+
+    <item android:id="@+id/scheduleFragment"
+        android:title="@string/bottom_nav_item_schedule">
+    </item>
+
+    <item android:id="@+id/recommendFragment"
+        android:title="@string/bottom_nav_item_recommend">
+    </item>
+
+    <item android:id="@+id/settingFragment"
+        android:title="@string/bottom_nav_item_setting">
+    </item>
+</menu>

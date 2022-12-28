@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/feedFragment"
+    android:id="@+id/nav_graph">
+
+    <fragment
+        android:label="fragment_feed"
+        android:id="@+id/feedFragment"
+        android:name="com.jiwondev.trep.fragments.FeedFragment"
+        tools:layout="@layout/fragment_feed">
+    </fragment>
+
+    <fragment
+        android:label="fragment_schedule"
+        android:id="@+id/scheduleFragment"
+        android:name="com.jiwondev.trep.fragments.ScheduleFragment"
+        tools:layout="@layout/fragment_schedule">
+    </fragment>
+
+    <fragment
+        android:label="fragment_recommend"
+        android:id="@+id/recommendFragment"
+        android:name="com.jiwondev.trep.fragments.RecommendFragment"
+        tools:layout="@layout/fragment_recommend">
+    </fragment>
+
+    <fragment
+        android:label="fragment_setting"
+        android:id="@+id/settingFragment"
+        android:name="com.jiwondev.trep.fragments.SettingFragment"
+        tools:layout="@layout/fragment_setting">
+    </fragment>
+</navigation>
