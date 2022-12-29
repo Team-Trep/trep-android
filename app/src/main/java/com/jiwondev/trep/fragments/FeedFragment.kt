@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.jiwondev.trep.R
+import com.jiwondev.trep.apdater.FeedAdapter
 import com.jiwondev.trep.databinding.FragmentFeedBinding
 
 class FeedFragment : Fragment() {
@@ -17,6 +18,13 @@ class FeedFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // TODO : BaseFragment에서 ViewModel, ViewBinding 상속시킬 것.
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
+
+        val testList: ArrayList<String> = arrayListOf(
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+        )
+
+        binding.feedViewPager.adapter = FeedAdapter(feedList = testList, fragment = this)
         return binding.root
     }
 
