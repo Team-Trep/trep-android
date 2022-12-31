@@ -1,9 +1,10 @@
-package com.jiwondev.trep
+package com.jiwondev.trep.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.jiwondev.trep.R
 import com.jiwondev.trep.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

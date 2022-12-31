@@ -8,28 +8,28 @@
     <fragment
         android:label="fragment_feed"
         android:id="@+id/feedFragment"
-        android:name="com.jiwondev.trep.fragments.FeedFragment"
+        android:name="com.jiwondev.trep.ui.fragment.FeedFragment"
         tools:layout="@layout/fragment_feed">
     </fragment>
 
     <fragment
         android:label="fragment_schedule"
         android:id="@+id/scheduleFragment"
-        android:name="com.jiwondev.trep.fragments.ScheduleFragment"
+        android:name="com.jiwondev.trep.ui.fragment.ScheduleFragment"
         tools:layout="@layout/fragment_schedule">
     </fragment>
 
     <fragment
         android:label="fragment_recommend"
         android:id="@+id/recommendFragment"
-        android:name="com.jiwondev.trep.fragments.RecommendFragment"
+        android:name="com.jiwondev.trep.ui.fragment.RecommendFragment"
         tools:layout="@layout/fragment_recommend">
     </fragment>
 
     <fragment
         android:label="fragment_setting"
         android:id="@+id/settingFragment"
-        android:name="com.jiwondev.trep.fragments.SettingFragment"
+        android:name="com.jiwondev.trep.ui.fragment.SettingFragment"
         tools:layout="@layout/fragment_setting">
     </fragment>
 </navigation>

@@ -1,4 +1,4 @@
-package com.jiwondev.trep.fragments
+package com.jiwondev.trep.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
