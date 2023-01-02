@@ -1,5 +1,6 @@
 package com.jiwondev.trep.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.jiwondev.trep.data.repository.AuthRepository
@@ -9,6 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import retrofit2.Response
+
+private const val TAG = "AuthViewModel"
 
 class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _loginFlow = MutableStateFlow(LoginResponse())
@@ -22,6 +25,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         userInfo["password"] = "test01"
 
         authRepository.getLoginInfo(userInfo).collect {
+            Log.d(TAG, "response : $it")
             _loginFlow.value = it
         }
     }
@@ -30,7 +34,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
 class AuthViewModelFactory(private val param: AuthRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(AuthRepository::class.java)) {
+        return if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
             AuthViewModel(param) as T
         } else {
             throw IllegalArgumentException()
