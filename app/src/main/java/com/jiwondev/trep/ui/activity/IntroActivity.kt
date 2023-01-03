@@ -17,7 +17,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-private const val TAG = "IntroActivity"
 class IntroActivity : AppCompatActivity() {
     lateinit var viewModel: AuthViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,14 +37,12 @@ class IntroActivity : AppCompatActivity() {
             ))[AuthViewModel::class.java]
 
         findViewById<Button>(R.id.button).setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                viewModel.getLogin()
-            }
+            viewModel.getLogin()
         }
 
         lifecycleScope.launchWhenStarted {
             viewModel.loginFlow.collectLatest {
-                Log.d(TAG, "loginFlow : $it")
+                Log.d("loginFlow :", it.toString())
             }
         }
     }

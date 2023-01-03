@@ -16,6 +16,7 @@ class AuthRemoteDataSource(private val ioDispatcher: CoroutineDispatcher) {
         withContext(ioDispatcher) {
             data = Retrofit.getInstance().create(AuthInterface::class.java).postLogin(userInfo).body()
         }
+        Log.d("AuthRemoteDataSource : ", data.toString())
         return data
     }
 }
