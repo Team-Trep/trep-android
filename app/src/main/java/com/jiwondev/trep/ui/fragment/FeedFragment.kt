@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.jiwondev.trep.apdater.FeedAdapter
+import com.jiwondev.trep.ui.apdater.FeedAdapter
 import com.jiwondev.trep.databinding.FragmentFeedBinding
 
 class FeedFragment : Fragment() {

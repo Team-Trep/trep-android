@@ -1,6 +1,7 @@
-package com.jiwondev.trep.viewmodel
+package com.jiwondev.trep.ui.viewmodel
 
 import android.util.Log
+import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -15,7 +16,14 @@ import retrofit2.Response
 
 private const val TAG = "AuthViewModel"
 
-class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+data class AuthPreferences(
+    val auto_login: Boolean
+)
+
+class AuthViewModel(
+    private val authRepository: AuthRepository,
+    private val dataStore: DataStore<AuthPreferences>
+) : ViewModel() {
     private val _loginFlow: MutableStateFlow<LoginResponse?> = MutableStateFlow(LoginResponse())
     val loginFlow: StateFlow<LoginResponse?>
         get() = _loginFlow.asStateFlow()
