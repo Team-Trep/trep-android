@@ -1,4 +1,4 @@
-package com.jiwondev.trep.model
+package com.jiwondev.trep.model.dto
 
 /** refresh token result도 같음. **/
 data class LoginResponse(

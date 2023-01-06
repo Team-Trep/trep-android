@@ -1,19 +1,25 @@
 package com.jiwondev.trep.ui.activity
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ui.PlayerView
 import com.jiwondev.trep.R
 import com.jiwondev.trep.data.datasource.AuthLocalDataSource
 import com.jiwondev.trep.data.datasource.AuthRemoteDataSource
 import com.jiwondev.trep.data.repository.AuthRepository
+import com.jiwondev.trep.resource.App.Companion.coroutineDispatcher
 import com.jiwondev.trep.resource.PreferencesKeys
 import com.jiwondev.trep.ui.viewmodel.AuthViewModel
 import com.jiwondev.trep.ui.viewmodel.AuthViewModelFactory
@@ -21,9 +27,14 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
+import java.io.ByteArrayInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
 import kotlin.properties.Delegates
 
+
 class IntroActivity : AppCompatActivity() {
+    var value = ""
     val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "trep_preference")
 
     private var bool: Boolean by Delegates.notNull()
@@ -32,7 +43,8 @@ class IntroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
 
-        val coroutineDispatcher = Dispatchers.IO
+        // 테스트용 액티비티
+        /** body에 들어온 비디오 스트리밍 테스트**/
 
 
         val test: Flow<Boolean> = dataStore.data
@@ -42,31 +54,33 @@ class IntroActivity : AppCompatActivity() {
             }
 
         GlobalScope.launch {
-            test.collectLatest {
-                Log.d("bool : ", it.toString())
-            }
+            val test = AuthRepository(
+                authRemoteDataSource = AuthRemoteDataSource(coroutineDispatcher),
+                authLocalDataSource = AuthLocalDataSource(dataStore)
+            ).getByteVideo()
+
+            val input: InputStream = ByteArrayInputStream(test.byteStream().readBytes())
         }
-
-
-        // TODO : ViewModel 주입방식 생각하기.
-        viewModel = ViewModelProvider(
-            this,
-            AuthViewModelFactory(
-                AuthRepository(
-                    authRemoteDataSource = AuthRemoteDataSource(coroutineDispatcher),
-                    authLocalDataSource = AuthLocalDataSource()
-                )
-            )
-        )[AuthViewModel::class.java]
 
         findViewById<Button>(R.id.button).setOnClickListener {
-            viewModel.getLogin()
-        }
+            Log.d("value : ", value.toUri().toString())
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.loginFlow.collectLatest {
-                Log.d("loginFlow :", it.toString())
+
+            val test = "https://localhost:3000/b43a577a-cc16-4149-8e84-75238bdc0427"
+            val player = SimpleExoPlayer.Builder(this).build()
+            val mediaItem = MediaItem.fromUri(test)
+           // val mediaItem = MediaItem.fromUri(Uri.parse(test))
+
+            Log.d("test : ", Uri.parse(test).toString())
+
+            player.apply {
+                setMediaItem(mediaItem)
+                prepare()
+                playWhenReady = true
             }
+
+            val exo = findViewById<PlayerView>(R.id.exo)
+            exo.player = player
         }
     }
 }

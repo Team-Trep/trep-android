@@ -1,9 +1,11 @@
 package com.jiwondev.trep.network
 
-import com.jiwondev.trep.model.LoginResponse
+import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.resource.Constant.Companion.POST_LOGIN
 import com.jiwondev.trep.resource.Constant.Companion.POST_REFRESH_TOKEN
 import com.jiwondev.trep.resource.Constant.Companion.POST_SIGN_UP
+import com.jiwondev.trep.resource.Constant.Companion.TEST_VIDEO
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -29,4 +31,11 @@ interface AuthInterface {
         @Header("username") username: String = "", // ${App.prefs.getStringData(Constant.username)}
         @Body tokenInfo: HashMap<String, String>
     ) : Response<LoginResponse>
+
+    @POST(TEST_VIDEO)
+    suspend fun postTestVideo(
+        @Header("Authorization") Authorization : String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzI5Mjg4MzcsImV4cCI6MTY3MzAxNTIzNywic3ViIjoidGVzdDAxIn0.b5kdXnwbKT8eKTNYrCXclrbaBt6d8wXnj-pp_s_mi3I",
+        @Header("Range") Range: String = "bytes=0-",
+        @Body tokenInfo: HashMap<String, String>
+    ) : ResponseBody
 }

@@ -9,5 +9,6 @@ class Constant {
         const val POST_SIGN_UP = "user/register" // 회원가입
         const val POST_LOGIN = "user/login" // 로그인
         const val POST_REFRESH_TOKEN = "user/refresh" // 토큰 재발급
+        const val TEST_VIDEO = "video/streaming" // 테스트 비디오
     }
 }

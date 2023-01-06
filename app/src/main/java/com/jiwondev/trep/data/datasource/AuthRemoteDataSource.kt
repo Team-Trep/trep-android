@@ -1,12 +1,11 @@
 package com.jiwondev.trep.data.datasource
 
 import android.util.Log
-import com.jiwondev.trep.model.LoginResponse
+import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.network.AuthInterface
 import com.jiwondev.trep.network.Retrofit
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 
 const val TAG = "AuthRemoteDataSource : "
 

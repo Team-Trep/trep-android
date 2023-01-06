@@ -1,29 +1,23 @@
 package com.jiwondev.trep.ui.viewmodel
 
 import android.util.Log
-import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.jiwondev.trep.data.repository.AuthRepository
-import com.jiwondev.trep.model.LoginResponse
-import kotlinx.coroutines.flow.MutableSharedFlow
+import com.jiwondev.trep.model.dto.LoginResponse
+import com.jiwondev.trep.model.preference.UserPreferences
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 private const val TAG = "AuthViewModel"
 
-data class AuthPreferences(
-    val auto_login: Boolean
-)
+class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+    val userPreferencesFlow: Flow<UserPreferences> = authRepository.userPreferencesFlow
 
-class AuthViewModel(
-    private val authRepository: AuthRepository,
-    private val dataStore: DataStore<AuthPreferences>
-) : ViewModel() {
     private val _loginFlow: MutableStateFlow<LoginResponse?> = MutableStateFlow(LoginResponse())
     val loginFlow: StateFlow<LoginResponse?>
         get() = _loginFlow.asStateFlow()
