@@ -3,6 +3,8 @@ package com.jiwondev.trep.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 class SplashActivity : AppCompatActivity() {
     lateinit var viewModel: AuthViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -29,18 +32,9 @@ class SplashActivity : AppCompatActivity() {
             viewModel.userPreferencesFlow.collect {
                 when(it.autoLogin) {
                     true -> {
-                        val intent = Intent(this@SplashActivity, MainActivity::class.java)
-                        // TODO : 페이지 전환 애니메이션 설정, 중복되는 코드 없애는거 생각
-                        startActivity(intent)
-                        finish()
+                        // TODO : 토큰인증
                     }
-
-                    false -> {
-                        val intent = Intent(this@SplashActivity, IntroActivity::class.java)
-                        // TODO : 페이지 전환 애니메이션 설정, 중복되는 코드 없애는거 생각
-                        startActivity(intent)
-                        finish()
-                    }
+                    false -> moveActivity(IntroActivity::class.java)
                 }
             }
         }
@@ -56,5 +50,12 @@ class SplashActivity : AppCompatActivity() {
                 )
             )
         )[AuthViewModel::class.java]
+    }
+
+    private fun moveActivity(clazz: Class<*>) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            startActivity(Intent(this, clazz))
+            finish()
+        }, 2000)
     }
 }
