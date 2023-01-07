@@ -50,7 +50,7 @@ class IntroActivity : AppCompatActivity() {
         binding = ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initViewModel()
+        init()
         clickListener()
 
         // 테스트용 액티비티
@@ -93,8 +93,8 @@ class IntroActivity : AppCompatActivity() {
 //            exo.player = player
     }
 
-    /** ViewModel 초기화 **/
-    private fun initViewModel() {
+    /** 초기화 **/
+    private fun init() {
         viewModel = ViewModelProvider(
             this,
             AuthViewModelFactory(
