@@ -19,7 +19,6 @@ class FeedFragment : Fragment() {
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
 
         val testList: ArrayList<String> = arrayListOf(
-            "352e8c5d-6382-4977-8daa-368c02643337.mp4",
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
         )
 

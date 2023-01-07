@@ -22,6 +22,9 @@ class AuthRepository(
 
     val userPreferencesFlow: Flow<UserPreferences> = authLocalDataSource.userPreferencesFlow
 
+    suspend fun serUserInfo(accessToken: String, refreshToken: String) {
+        authLocalDataSource.setUserInfo(accessToken, refreshToken)
+    }
 
     suspend fun getLoginInfo(userInfo: HashMap<String, String>): Flow<LoginResponse?> = flow {
         emit(authRemoteDataSource.login(userInfo))

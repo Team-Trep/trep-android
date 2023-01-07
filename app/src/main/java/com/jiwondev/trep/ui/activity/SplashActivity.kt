@@ -30,12 +30,13 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launchWhenStarted {
             viewModel.userPreferencesFlow.collect {
-                when(it.autoLogin) {
-                    true -> {
-                        // TODO : 토큰인증
-                    }
-                    false -> moveActivity(IntroActivity::class.java)
-                }
+                moveActivity(IntroActivity::class.java)
+//                when(it.autoLogin) {
+//                    true -> {
+//                        // TODO : 토큰인증
+//                    }
+//                    false -> moveActivity(IntroActivity::class.java)
+//                }
             }
         }
     }

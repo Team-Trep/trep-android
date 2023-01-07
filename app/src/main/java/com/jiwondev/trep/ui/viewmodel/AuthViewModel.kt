@@ -22,18 +22,19 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     val loginFlow: StateFlow<LoginResponse?>
         get() = _loginFlow.asStateFlow()
 
-    fun getLogin() = viewModelScope.launch {
-        Log.d(TAG, "getLogin")
-        // TODO : UI 구현 후 삭제
-
+    fun getLogin(userId: String, userPassword: String) = viewModelScope.launch {
         val userInfo = hashMapOf<String, String>()
-        userInfo["username"] = "test01"
-        userInfo["password"] = "test012"
+        userInfo["username"] = userId
+        userInfo["password"] = userPassword
 
         authRepository.getLoginInfo(userInfo).collect {
-            Log.d("getLoginInfo : ", it.toString())
             _loginFlow.value = it
         }
+    }
+
+    /** Datastore write **/
+    fun setUserInfo(accessToken: String, refreshToken: String) = viewModelScope.launch {
+        authRepository.serUserInfo(accessToken, refreshToken)
     }
 }
 

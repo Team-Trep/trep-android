@@ -2,9 +2,9 @@ package com.jiwondev.trep.model.dto
 
 /** refresh token result도 같음. **/
 data class LoginResponse(
-    val refreshToken: String? = null,
-    val refreshTokenExpire: String? = null,
-    val token: String? = null,
-    val tokenExpire: String? = null,
-    val username: String? = null
+    val refreshToken: String = "",
+    val refreshTokenExpire: String = "",
+    val token: String = "",
+    val tokenExpire: String = "",
+    val username: String = ""
 )

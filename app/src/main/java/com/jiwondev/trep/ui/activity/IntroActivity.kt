@@ -1,6 +1,7 @@
 package com.jiwondev.trep.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -43,6 +44,7 @@ class IntroActivity : AppCompatActivity() {
 //    private var bool: Boolean by Delegates.notNull()
     lateinit var viewModel: AuthViewModel
     lateinit var binding: ActivityIntroBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityIntroBinding.inflate(layoutInflater)
@@ -50,9 +52,6 @@ class IntroActivity : AppCompatActivity() {
 
         initViewModel()
         clickListener()
-
-
-
 
         // 테스트용 액티비티
         /** body에 들어온 비디오 스트리밍 테스트**/
@@ -94,6 +93,7 @@ class IntroActivity : AppCompatActivity() {
 //            exo.player = player
     }
 
+    /** ViewModel 초기화 **/
     private fun initViewModel() {
         viewModel = ViewModelProvider(
             this,
@@ -104,26 +104,35 @@ class IntroActivity : AppCompatActivity() {
                 )
             )
         )[AuthViewModel::class.java]
-    }
-
-    private fun userLogin() {
-        viewModel.getLogin()
 
         lifecycleScope.launchWhenStarted {
             viewModel.loginFlow.collect {
+                Log.d("loginFlow : ", it.toString())
+                // TODO : Status Code로 분기
                 when(it) {
                     null -> Toast.makeText(this@IntroActivity, "올바른 정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
                     else -> {
-                        // TODO : Datastore write -> login, tokens
+                        // viewModel.setUserInfo(it.token, it.refreshToken)
+
+                        val intent = Intent(this@IntroActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     }
                 }
             }
         }
     }
 
+    /** 로그인 **/
+    private fun userLogin() {
+        viewModel.getLogin(
+            userId = binding.idEditText.text.toString(),
+            userPassword = binding.passwordEditText.text.toString()
+        )
+    }
+
+    /** UI 클릭 이벤트 **/
     private fun clickListener() {
-        binding.loginButton.setOnClickListener {
-            userLogin()
-        }
+        binding.loginButton.setOnClickListener { userLogin() } // 로그인
     }
 }

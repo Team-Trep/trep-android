@@ -2,6 +2,7 @@ package com.jiwondev.trep.data.datasource
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import com.jiwondev.trep.model.preference.UserPreferences
 import com.jiwondev.trep.resource.PreferencesKeys
@@ -26,4 +27,15 @@ class AuthLocalDataSource(private val datastore: DataStore<Preferences>) {
             val userRefreshToken = preferences[PreferencesKeys.USER_REFRESH_TOKEN] ?: ""
             UserPreferences(autoLogin, userToken, userRefreshToken)
         }
+
+    /** 데이터 쓰기 **/
+    suspend fun setUserInfo(accessToken: String, refreshToken: String) {
+        datastore.edit { preferences ->
+            preferences.apply {
+                this[PreferencesKeys.AUTO_LOGIN] = true
+                this[PreferencesKeys.USER_TOKEN] = accessToken
+                this[PreferencesKeys.USER_REFRESH_TOKEN] = refreshToken
+            }
+        }
+    }
 }
