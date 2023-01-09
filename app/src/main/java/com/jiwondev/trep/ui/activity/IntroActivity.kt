@@ -46,7 +46,6 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
 
         init()
         clickListener()
@@ -110,11 +109,9 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
                 when(it) {
                     null -> Toast.makeText(this@IntroActivity, "올바른 정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
                     else -> {
-                        // viewModel.setUserInfo(it.token, it.refreshToken)
-
-//                        val intent = Intent(this@IntroActivity, MainActivity::class.java)
-//                        startActivity(intent)
-//                        finish()
+                        viewModel.setUserInfo(it.token, it.refreshToken)
+                        startActivity((Intent(this@IntroActivity, SignUpActivity::class.java)))
+                        finish()
                     }
                 }
             }
@@ -136,6 +133,7 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
 
         // 회원가입
         binding.signUpTextView.setOnClickListener {
+            Log.d("click : ", "click")
             startActivity((Intent(this, SignUpActivity::class.java)))
         }
     }

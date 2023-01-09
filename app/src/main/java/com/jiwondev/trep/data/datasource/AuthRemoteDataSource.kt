@@ -12,11 +12,13 @@ import retrofit2.Response
 
 const val TAG = "AuthRemoteDataSource : "
 
-lateinit var data: LoginResponse
+var data: LoginResponse? = null
+
 class AuthRemoteDataSource(private val ioDispatcher: CoroutineDispatcher) {
-    suspend fun login(userInfo: HashMap<String, String>): LoginResponse {
+    suspend fun login(userInfo: HashMap<String, String>): LoginResponse? {
         withContext(ioDispatcher) {
-            data = Retrofit.getInstance().create(AuthInterface::class.java).postLogin(userInfo).body()!!
+            data = Retrofit.getInstance().create(AuthInterface::class.java).postLogin(userInfo).body()
+            Log.d("data : ", data.toString())
         }
         return data
     }
