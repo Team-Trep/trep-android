@@ -17,6 +17,7 @@ import com.jiwondev.trep.resource.App.Companion.coroutineDispatcher
 import com.jiwondev.trep.resource.App.Companion.dataStore
 import com.jiwondev.trep.ui.viewmodel.AuthViewModel
 import com.jiwondev.trep.ui.viewmodel.AuthViewModelFactory
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 
 class SplashActivity : AppCompatActivity() {
@@ -27,6 +28,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         init()
+
 
         lifecycleScope.launchWhenStarted {
             viewModel.userPreferencesFlow.collect {

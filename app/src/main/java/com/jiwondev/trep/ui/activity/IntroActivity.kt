@@ -37,18 +37,16 @@ import java.io.InputStream
 import kotlin.properties.Delegates
 
 
-class IntroActivity : AppCompatActivity() {
+class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.inflate(it)}) {
     //    var value = ""
 //    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "trep_preference")
 //
 //    private var bool: Boolean by Delegates.notNull()
     lateinit var viewModel: AuthViewModel
-    lateinit var binding: ActivityIntroBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityIntroBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_intro)
 
         init()
         clickListener()
@@ -114,9 +112,9 @@ class IntroActivity : AppCompatActivity() {
                     else -> {
                         // viewModel.setUserInfo(it.token, it.refreshToken)
 
-                        val intent = Intent(this@IntroActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
+//                        val intent = Intent(this@IntroActivity, MainActivity::class.java)
+//                        startActivity(intent)
+//                        finish()
                     }
                 }
             }
@@ -133,6 +131,12 @@ class IntroActivity : AppCompatActivity() {
 
     /** UI 클릭 이벤트 **/
     private fun clickListener() {
-        binding.loginButton.setOnClickListener { userLogin() } // 로그인
+        // 로그인
+        binding.loginButton.setOnClickListener { userLogin() }
+
+        // 회원가입
+        binding.signUpTextView.setOnClickListener {
+            startActivity((Intent(this, SignUpActivity::class.java)))
+        }
     }
 }
