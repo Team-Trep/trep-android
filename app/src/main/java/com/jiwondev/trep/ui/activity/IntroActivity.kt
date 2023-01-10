@@ -12,8 +12,10 @@ import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
@@ -22,6 +24,7 @@ import com.jiwondev.trep.data.datasource.AuthLocalDataSource
 import com.jiwondev.trep.data.datasource.AuthRemoteDataSource
 import com.jiwondev.trep.data.repository.AuthRepository
 import com.jiwondev.trep.databinding.ActivityIntroBinding
+import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.resource.App.Companion.coroutineDispatcher
 import com.jiwondev.trep.resource.App.Companion.dataStore
 import com.jiwondev.trep.resource.PreferencesKeys
@@ -30,6 +33,7 @@ import com.jiwondev.trep.ui.viewmodel.AuthViewModelFactory
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import java.io.ByteArrayInputStream
 import java.io.FileOutputStream
@@ -102,16 +106,18 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
             )
         )[AuthViewModel::class.java]
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.loginFlow.collect {
-                Log.d("loginFlow : ", it.toString())
-                // TODO : Status Code로 분기
-                when(it) {
-                    null -> Toast.makeText(this@IntroActivity, "올바른 정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
-                    else -> {
-                        viewModel.setUserInfo(it.token, it.refreshToken)
-                        startActivity((Intent(this@IntroActivity, SignUpActivity::class.java)))
-                        finish()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loginFlow.collectLatest {
+                    when(it?.code) {
+                        200 -> {
+                            viewModel.setUserInfo(it.token, it.refreshToken)
+                            startActivity((Intent(this@IntroActivity, MainActivity::class.java)))
+                            finish()
+                        }
+                        400, 404 -> Toast.makeText(this@IntroActivity, "올바른 정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                        null, in 500..599 -> Toast.makeText(this@IntroActivity, "서버에러", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -128,13 +134,7 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
 
     /** UI 클릭 이벤트 **/
     private fun clickListener() {
-        // 로그인
         binding.loginButton.setOnClickListener { userLogin() }
-
-        // 회원가입
-        binding.signUpTextView.setOnClickListener {
-            Log.d("click : ", "click")
-            startActivity((Intent(this, SignUpActivity::class.java)))
-        }
+        binding.signUpTextView.setOnClickListener { startActivity((Intent(this, SignUpActivity::class.java))) }
     }
 }

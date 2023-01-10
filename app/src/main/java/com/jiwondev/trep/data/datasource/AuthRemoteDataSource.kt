@@ -17,8 +17,14 @@ var data: LoginResponse? = null
 class AuthRemoteDataSource(private val ioDispatcher: CoroutineDispatcher) {
     suspend fun login(userInfo: HashMap<String, String>): LoginResponse? {
         withContext(ioDispatcher) {
-            data = Retrofit.getInstance().create(AuthInterface::class.java).postLogin(userInfo).body()
-            Log.d("data : ", data.toString())
+            val response = Retrofit.getInstance().create(AuthInterface::class.java).postLogin(userInfo)
+            when(response.isSuccessful) {
+                true -> {
+                    data = response.body()
+                    data?.code = response.code()
+                }
+                false -> data = LoginResponse(code = response.code())
+            }
         }
         return data
     }
