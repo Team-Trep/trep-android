@@ -13,8 +13,9 @@
         android:layout_marginTop="20dp"
         android:text="둘러보기"
         android:textColor="#BBBBBB"
-        app:layout_constraintEnd_toEndOf="@+id/idEditText"
-        app:layout_constraintTop_toTopOf="parent"></TextView>
+        app:layout_constraintEnd_toEndOf="@+id/emailEditText"
+        app:layout_constraintTop_toTopOf="parent">
+    </TextView>
 
     <ImageView
         android:id="@+id/imageView"
@@ -31,7 +32,7 @@
     <EditText
         android:text="wdwd"
         style="@style/Text.MediumText15sp"
-        android:id="@+id/idEditText"
+        android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="28dp"
@@ -44,26 +45,38 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView">
     </EditText>
 
+    <TextView
+        android:id="@+id/emailFormatErrorTextView"
+        style="@style/Text.MediumErrorText12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/email_format_error"
+        app:layout_constraintStart_toStartOf="@+id/emailEditText"
+        app:layout_constraintTop_toBottomOf="@+id/emailEditText">
+    </TextView>
+
 
     <EditText
-        android:hint="영문, 숫자, 특수문자 포함 8~20자"
         android:id="@+id/passwordEditText"
         style="@style/Text.MediumText15sp"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/edit_bg_grey_radius_10dp"
+        android:hint="@string/password_hint"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/idEditText"
-        app:layout_constraintStart_toStartOf="@+id/idEditText"
-        app:layout_constraintTop_toBottomOf="@+id/idEditText"></EditText>
+        app:layout_constraintEnd_toEndOf="@+id/emailEditText"
+        app:layout_constraintStart_toStartOf="@+id/emailEditText"
+        app:layout_constraintTop_toBottomOf="@+id/emailFormatErrorTextView">
+    </EditText>
 
     <TextView
-        style="@style/Text.MediumText16sp"
         android:id="@+id/loginButton"
+        style="@style/Text.MediumText16sp"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="80dp"
         android:background="@drawable/btn_bg_grey_radius_6dp"
         android:gravity="center"
         android:text="Button"
@@ -81,25 +94,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButton" />
-
-
-    <!--    <Button-->
-<!--        android:id="@+id/button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Button"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--    <com.google.android.exoplayer2.ui.PlayerView-->
-<!--        android:id="@+id/exo"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-<!--    </com.google.android.exoplayer2.ui.PlayerView>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

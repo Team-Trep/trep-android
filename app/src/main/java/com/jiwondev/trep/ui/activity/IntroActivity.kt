@@ -4,11 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.core.widget.addTextChangedListener
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -28,6 +32,7 @@ import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.resource.App.Companion.coroutineDispatcher
 import com.jiwondev.trep.resource.App.Companion.dataStore
 import com.jiwondev.trep.resource.PreferencesKeys
+import com.jiwondev.trep.resource.Utils
 import com.jiwondev.trep.ui.viewmodel.AuthViewModel
 import com.jiwondev.trep.ui.viewmodel.AuthViewModelFactory
 import kotlinx.coroutines.*
@@ -127,14 +132,27 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
     /** 로그인 **/
     private fun userLogin() {
         viewModel.getLogin(
-            userId = binding.idEditText.text.toString(),
+            userId = binding.emailEditText.text.toString(),
             userPassword = binding.passwordEditText.text.toString()
         )
     }
 
-    /** UI 클릭 이벤트 **/
+    /** UI 이벤트 **/
     private fun clickListener() {
         binding.loginButton.setOnClickListener { userLogin() }
         binding.signUpTextView.setOnClickListener { startActivity((Intent(this, SignUpActivity::class.java))) }
+
+        binding.emailEditText.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+
+            override fun afterTextChanged(inputResult: Editable?) {
+                when(Utils.checkEmailRegex(inputResult.toString())) {
+                    true -> binding.emailFormatErrorTextView.visibility = View.GONE
+                    false -> binding.emailFormatErrorTextView.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 }

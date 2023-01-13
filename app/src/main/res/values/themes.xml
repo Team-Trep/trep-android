@@ -30,11 +30,18 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="Text.BoldText" parent="android:TextAppearance">
+    <style name="Text.BoldText15sp" parent="android:TextAppearance">
         <item name="android:paddingLeft">24sp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/app_font</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text.MediumErrorText12sp" parent="android:TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/red_error</item>
+        <item name="android:fontFamily">@font/app_font</item>
+        <item name="android:textStyle">normal</item>
     </style>
 </resources>

@@ -1,8 +1,12 @@
 package com.jiwondev.trep.resource
 
-import android.content.Context
-import android.content.Intent
+import java.util.regex.Pattern
 
-open class Utils {
-
+class Utils {
+    companion object {
+        fun checkEmailRegex(email: String): Boolean {
+            val emailValidation = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+            return Pattern.matches(emailValidation, email)
+        }
+    }
 }
