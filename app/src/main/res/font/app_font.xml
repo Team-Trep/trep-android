@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <font
+        app:font="@font/apple_sd_neo_bold"
+        app:fontStyle="normal"
+        android:font="@font/apple_sd_neo_bold"
+        android:fontStyle="normal">
+    </font>
+
+    <font
+        app:font="@font/apple_sd_neo_medium"
+        app:fontStyle="normal"
+        android:font="@font/apple_sd_neo_medium"
+        android:fontStyle="normal">
+    </font>
+
+    <font
+        app:font="@font/apple_sd_neo_light"
+        app:fontStyle="normal"
+        android:font="@font/apple_sd_neo_light"
+        android:fontStyle="normal">
+    </font>
+
+</font-family>

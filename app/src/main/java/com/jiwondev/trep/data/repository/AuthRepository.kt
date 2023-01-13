@@ -27,6 +27,7 @@ class AuthRepository(
     }
 
     suspend fun getLoginInfo(userInfo: HashMap<String, String>): Flow<LoginResponse?> = flow {
+        /** TODO catch로 예외처리 **/
         emit(authRemoteDataSource.login(userInfo))
     }
 

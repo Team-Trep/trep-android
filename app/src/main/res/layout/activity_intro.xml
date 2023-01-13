@@ -6,42 +6,70 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.IntroActivity">
 
+    <TextView
+        style="@style/Text.MediumText15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="둘러보기"
+        android:textColor="#BBBBBB"
+        app:layout_constraintEnd_toEndOf="@+id/idEditText"
+        app:layout_constraintTop_toTopOf="parent"></TextView>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15">
     </ImageView>
 
     <EditText
-        android:inputType="text"
+        android:text="wdwd"
+        style="@style/Text.MediumText15sp"
         android:id="@+id/idEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:layout_editor_absoluteX="0dp">
-    </EditText>
-
-    <EditText
-        android:inputType="textPassword"
-        android:id="@+id/passwordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/idEditText"
-        tools:layout_editor_absoluteX="0dp">
-    </EditText>
-
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Button"
+        android:layout_height="48dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="28dp"
+        android:background="@drawable/edit_bg_grey_radius_10dp"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+    </EditText>
+
+
+    <EditText
+        android:hint="영문, 숫자, 특수문자 포함 8~20자"
+        android:id="@+id/passwordEditText"
+        style="@style/Text.MediumText15sp"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/edit_bg_grey_radius_10dp"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/idEditText"
+        app:layout_constraintStart_toStartOf="@+id/idEditText"
+        app:layout_constraintTop_toBottomOf="@+id/idEditText"></EditText>
+
+    <TextView
+        style="@style/Text.MediumText16sp"
+        android:id="@+id/loginButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_bg_grey_radius_6dp"
+        android:gravity="center"
+        android:text="Button"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/passwordEditText"
+        app:layout_constraintStart_toStartOf="@+id/passwordEditText"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
 
     <TextView
