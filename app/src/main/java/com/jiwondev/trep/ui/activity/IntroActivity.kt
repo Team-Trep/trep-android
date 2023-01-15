@@ -47,59 +47,14 @@ import kotlin.properties.Delegates
 
 
 class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.inflate(it)}) {
-    //    var value = ""
-//    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "trep_preference")
-//
-//    private var bool: Boolean by Delegates.notNull()
     lateinit var viewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         init()
         clickListener()
-
-        // 테스트용 액티비티
-        /** body에 들어온 비디오 스트리밍 테스트**/
-
-
-//        val test: Flow<Boolean> = dataStore.data
-//            .map { preferences ->
-//                bool = preferences[PreferencesKeys.AUTO_LOGIN] ?: true
-//                preferences[PreferencesKeys.AUTO_LOGIN] ?: true
-//            }
-//
-//        GlobalScope.launch {
-//            val test = AuthRepository(
-//                authRemoteDataSource = AuthRemoteDataSource(coroutineDispatcher),
-//                authLocalDataSource = AuthLocalDataSource(dataStore)
-//            ).getByteVideo()
-//
-//            val input: InputStream = ByteArrayInputStream(test.byteStream().readBytes())
-//        }
-//
-//        findViewById<Button>(R.id.button).setOnClickListener {
-//            Log.d("value : ", value.toUri().toString())
-//
-//
-//            val test = "https://localhost:3000/b43a577a-cc16-4149-8e84-75238bdc0427"
-//            val player = SimpleExoPlayer.Builder(this).build()
-//            val mediaItem = MediaItem.fromUri(test)
-//           // val mediaItem = MediaItem.fromUri(Uri.parse(test))
-//
-//            Log.d("test : ", Uri.parse(test).toString())
-//
-//            player.apply {
-//                setMediaItem(mediaItem)
-//                prepare()
-//                playWhenReady = true
-//            }
-//
-//            val exo = findViewById<PlayerView>(R.id.exo)
-//            exo.player = player
     }
 
-    /** 초기화 **/
     private fun init() {
         viewModel = ViewModelProvider(
             this,
@@ -129,24 +84,22 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
         }
     }
 
-    /** 로그인 **/
-    private fun userLogin() {
-        viewModel.getLogin(
-            userId = binding.emailEditText.text.toString(),
-            userPassword = binding.passwordEditText.text.toString()
-        )
-    }
-
     /** UI 이벤트 **/
     private fun clickListener() {
-        binding.loginButton.setOnClickListener { userLogin() }
-        binding.signUpTextView.setOnClickListener { startActivity((Intent(this, SignUpActivity::class.java))) }
+        binding.loginButton.setOnClickListener {
+            viewModel.getLogin(
+                userId = binding.emailEditText.text.toString(),
+                userPassword = binding.passwordEditText.text.toString()
+            )
+        }
+
+        binding.signUpTextView.setOnClickListener {
+            startActivity((Intent(this, SignUpActivity::class.java)))
+        }
 
         binding.emailEditText.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-
             override fun afterTextChanged(inputResult: Editable?) {
                 when(Utils.checkEmailRegex(inputResult.toString())) {
                     true -> binding.emailFormatErrorTextView.visibility = View.GONE
@@ -154,5 +107,33 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
                 }
             }
         })
+
+        binding.passwordEditText.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(inputResult: Editable?) {
+                when(Utils.checkPasswordRegex(inputResult.toString())) {
+                    true -> binding.passwordFormatErrorTextView.visibility = View.GONE
+                    false -> binding.passwordFormatErrorTextView.visibility = View.VISIBLE
+                }
+            }
+        })
+
+        // 129는 inputType이 password
+        // 1은 inputType이 text
+        binding.visiblePasswordImageView.setOnClickListener {
+            when(binding.passwordEditText.inputType) {
+                129 -> binding.passwordEditText.inputType = 1
+                1 -> binding.passwordEditText.inputType = 129
+            }
+        }
+
+        binding.walkThroghtTextView.setOnClickListener {
+            startActivity(Intent(this, WalkThroughActivity::class.java))
+        }
+
+        binding.forgotTextView.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+        }
     }
 }
