@@ -1,15 +1,19 @@
 package com.jiwondev.trep.network
 
 import com.jiwondev.trep.model.dto.LoginResponse
+import com.jiwondev.trep.model.dto.SendEmailResponse
 import com.jiwondev.trep.resource.Constant.Companion.POST_LOGIN
 import com.jiwondev.trep.resource.Constant.Companion.POST_REFRESH_TOKEN
 import com.jiwondev.trep.resource.Constant.Companion.POST_SIGN_UP
 import com.jiwondev.trep.resource.Constant.Companion.TEST_VIDEO
+import com.jiwondev.trep.resource.Constant.Companion.USER_EMAIL_SEND
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface AuthInterface {
     /** 회원가입 **/
@@ -31,6 +35,12 @@ interface AuthInterface {
         @Header("username") username: String = "", // ${App.prefs.getStringData(Constant.username)}
         @Body tokenInfo: HashMap<String, String>
     ) : Response<LoginResponse>
+
+    /** 이메일 전송 **/
+    @GET(USER_EMAIL_SEND)
+    suspend fun getSendEmail(
+        @Query("email") email: String,
+    ) : Response<SendEmailResponse>
 
     @POST(TEST_VIDEO)
     suspend fun postTestVideo(

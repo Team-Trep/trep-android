@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import com.jiwondev.trep.data.datasource.AuthLocalDataSource
 import com.jiwondev.trep.data.datasource.AuthRemoteDataSource
 import com.jiwondev.trep.model.dto.LoginResponse
+import com.jiwondev.trep.model.dto.SendEmailResponse
 import com.jiwondev.trep.model.preference.UserPreferences
 import com.jiwondev.trep.network.AuthInterface
 import com.jiwondev.trep.network.Retrofit
@@ -30,6 +31,9 @@ class AuthRepository(
         /** TODO catch로 예외처리 **/
         emit(authRemoteDataSource.login(userInfo))
     }
+
+    suspend fun getSendEmail(email: String) = authRemoteDataSource.sendEmail(email)
+
 
     // Video Test
     suspend fun getByteVideo(): ResponseBody {

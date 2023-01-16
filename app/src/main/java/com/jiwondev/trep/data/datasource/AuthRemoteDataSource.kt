@@ -28,4 +28,11 @@ class AuthRemoteDataSource(private val ioDispatcher: CoroutineDispatcher) {
         }
         return data
     }
+
+    suspend fun sendEmail(email: String): Int {
+        val code = withContext(ioDispatcher) {
+            Retrofit.getInstance().create(AuthInterface::class.java).getSendEmail(email).code()
+        }
+        return code
+    }
 }
