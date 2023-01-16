@@ -16,10 +16,7 @@ import kotlinx.coroutines.flow.map
 import okhttp3.ResponseBody
 import java.io.IOException
 
-class AuthRepository(
-    private val authRemoteDataSource: AuthRemoteDataSource,
-    private val authLocalDataSource: AuthLocalDataSource
-) {
+class AuthRepository(private val authRemoteDataSource: AuthRemoteDataSource, private val authLocalDataSource: AuthLocalDataSource) {
 
     val userPreferencesFlow: Flow<UserPreferences> = authLocalDataSource.userPreferencesFlow
 
@@ -33,6 +30,10 @@ class AuthRepository(
     }
 
     suspend fun getSendEmail(email: String) = authRemoteDataSource.sendEmail(email)
+
+//    suspend fun getVeryfied(email: String, key: String)
+
+
 
 
     // Video Test

@@ -1,5 +1,6 @@
 package com.jiwondev.trep.ui.viewmodel
 
+import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.*
 import com.jiwondev.trep.data.repository.AuthRepository
@@ -11,6 +12,9 @@ import kotlinx.coroutines.launch
 private const val TAG = "AuthViewModel"
 
 class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+    var countDownTimer: CountDownTimer? = null
+    var time = 180 // 인증 만료 시간 -> 3분
+
     val userPreferencesFlow: Flow<UserPreferences> = authRepository.userPreferencesFlow
 
     private var _loginFlow: MutableSharedFlow<LoginResponse?> = MutableSharedFlow()
@@ -20,6 +24,11 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private var _sendEmailLiveData: MutableLiveData<Int> = MutableLiveData()
     val sendEmailLiveData: LiveData<Int>
         get() = _sendEmailLiveData
+
+    // private var _codeVerified: MutableLiveData
+//    val codeVerified: LiveData<>
+//        get() = _codeVerified
+
 
     fun getLogin(userId: String, userPassword: String) = viewModelScope.launch {
         val userInfo = hashMapOf<String, String>()
@@ -33,6 +42,10 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     fun getSendEmail(email: String) = viewModelScope.launch {
         _sendEmailLiveData.value = authRepository.getSendEmail(email)
+    }
+
+    fun getVerified(email: String, key: String) = viewModelScope.launch {
+//        _codeVerified.value =
     }
 
     /** Datastore write **/

@@ -72,7 +72,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/emialValidationButton"
+                    android:id="@+id/emailValidationButton"
                     style="@style/Text.MediumText16sp"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
@@ -88,7 +88,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/emailEditTextView"></TextView>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/authCodeConstraint"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                     android:background="#FBFBFB"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/emialValidationButton">
+                    app:layout_constraintTop_toBottomOf="@+id/emailValidationButton">
 
                     <TextView
                         android:id="@+id/textView4"
@@ -137,7 +137,7 @@
                             app:layout_constraintTop_toTopOf="parent"></EditText>
 
                         <TextView
-                            android:id="@+id/textView9"
+                            android:id="@+id/secondTextView"
                             style="@style/Text.MediumTextNotPadding15sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -149,14 +149,14 @@
                             app:layout_constraintTop_toTopOf="@+id/codeValidationButton"></TextView>
 
                         <TextView
-                            android:id="@+id/textView8"
+                            android:id="@+id/minuteTextView"
                             style="@style/Text.MediumTextNotPadding15sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="00:"
                             android:textColor="#FF8585"
                             app:layout_constraintBottom_toBottomOf="@+id/codeValidationButton"
-                            app:layout_constraintEnd_toStartOf="@+id/textView9"
+                            app:layout_constraintEnd_toStartOf="@+id/secondTextView"
                             app:layout_constraintTop_toTopOf="@+id/codeValidationButton"></TextView>
 
                         <TextView
@@ -239,8 +239,8 @@
                     android:hint="비밀번호 확인"
                     android:paddingStart="15dp"
                     android:textSize="15sp"
-                    app:layout_constraintEnd_toEndOf="@+id/emialValidationButton"
-                    app:layout_constraintStart_toStartOf="@+id/emialValidationButton"
+                    app:layout_constraintEnd_toEndOf="@+id/emailValidationButton"
+                    app:layout_constraintStart_toStartOf="@+id/emailValidationButton"
                     app:layout_constraintTop_toBottomOf="@+id/passwordErrorTextView">
                 </EditText>
 
@@ -268,9 +268,9 @@
                     android:background="@drawable/edit_bg_grey_radius_10dp"
                     android:hint="비밀번호"
                     android:textSize="15sp"
-                    app:layout_constraintEnd_toEndOf="@+id/emialValidationButton"
+                    app:layout_constraintEnd_toEndOf="@+id/emailValidationButton"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/emialValidationButton"
+                    app:layout_constraintStart_toStartOf="@+id/emailValidationButton"
                     app:layout_constraintTop_toBottomOf="@+id/authCodeConstraint">
                 </EditText>
 
@@ -295,8 +295,8 @@
                     android:hint="닉네임(최대 8자까지)"
                     android:paddingStart="15dp"
                     android:textSize="15sp"
-                    app:layout_constraintEnd_toEndOf="@+id/emialValidationButton"
-                    app:layout_constraintStart_toStartOf="@+id/emialValidationButton"
+                    app:layout_constraintEnd_toEndOf="@+id/emailValidationButton"
+                    app:layout_constraintStart_toStartOf="@+id/emailValidationButton"
                     app:layout_constraintTop_toBottomOf="@+id/passwordCheckErrorTextView">
                 </EditText>
 
