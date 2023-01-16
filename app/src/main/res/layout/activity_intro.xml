@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:padding="5dp"
-        android:src="@drawable/password_eye"
+        android:src="@drawable/password_eye_icon"
         app:layout_constraintBottom_toBottomOf="@+id/passwordEditText"
         app:layout_constraintEnd_toEndOf="@+id/passwordEditText"
         app:layout_constraintTop_toTopOf="@+id/passwordEditText"></ImageView>
