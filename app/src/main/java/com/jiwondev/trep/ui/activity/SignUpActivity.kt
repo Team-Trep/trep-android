@@ -19,6 +19,10 @@ import com.jiwondev.trep.data.repository.AuthRepository
 import com.jiwondev.trep.databinding.ActivitySignUpBinding
 import com.jiwondev.trep.resource.App
 import com.jiwondev.trep.resource.App.Companion.dataStore
+import com.jiwondev.trep.resource.Constant.Companion.E01_500
+import com.jiwondev.trep.resource.Constant.Companion.E02_400
+import com.jiwondev.trep.resource.Constant.Companion.E03_400
+import com.jiwondev.trep.resource.Constant.Companion.SUCCESS
 import com.jiwondev.trep.ui.viewmodel.AuthViewModel
 import com.jiwondev.trep.ui.viewmodel.AuthViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
@@ -32,17 +36,13 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
 
         init()
         clickListener()
-        subscribeUi()
     }
 
     private fun clickListener() {
         binding.emailValidationButton.setOnClickListener {
-            // viewModel.getSendEmail(binding.emailEditTextView.text.toString())
+             viewModel.getSendEmail(binding.emailEditTextView.text.toString())
 
             // 200일 때
-            binding.authCodeConstraint.visibility = View.VISIBLE
-            binding.emailValidationButton.isEnabled = false
-            startTimer()
 
 
         }
@@ -72,17 +72,29 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
             )
         )[AuthViewModel::class.java]
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.sendEmailFlow.collectLatest { it ->
+                    when(it?.code) {
+                        SUCCESS -> {
+                            binding.authCodeConstraint.visibility = View.VISIBLE
+                            binding.emailValidationButton.isEnabled = false
+                            startTimer()
+                        }
+
+                        E01_500 -> {} // 이메일 전송 실패
+
+                        E02_400 -> {} // 유효하지 않은 이메일
+
+                        null -> Toast.makeText(this@SignUpActivity, "서버에러", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
         binding.emailResendTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 
-    private fun subscribeUi() {
-        viewModel.sendEmailLiveData.observe(this) { code ->
-            when(code) {
-                200 -> binding.authCodeConstraint.visibility = View.VISIBLE
-                400 -> Toast.makeText(this, "이메일 형식으로 입력해주세요.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     private fun startTimer() {
         // 3분

@@ -29,7 +29,9 @@ class AuthRepository(private val authRemoteDataSource: AuthRemoteDataSource, pri
         emit(authRemoteDataSource.login(userInfo))
     }
 
-    suspend fun getSendEmail(email: String) = authRemoteDataSource.sendEmail(email)
+    suspend fun getSendEmail(email: String): Flow<SendEmailResponse?> = flow {
+        emit(authRemoteDataSource.sendEmail(email))
+    }
 
 //    suspend fun getVeryfied(email: String, key: String)
 

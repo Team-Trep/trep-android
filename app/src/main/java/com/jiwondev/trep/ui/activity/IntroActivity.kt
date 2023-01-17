@@ -31,6 +31,9 @@ import com.jiwondev.trep.databinding.ActivityIntroBinding
 import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.resource.App.Companion.coroutineDispatcher
 import com.jiwondev.trep.resource.App.Companion.dataStore
+import com.jiwondev.trep.resource.Constant.Companion.SUCCESS
+import com.jiwondev.trep.resource.Constant.Companion.U01_404
+import com.jiwondev.trep.resource.Constant.Companion.U02_400
 import com.jiwondev.trep.resource.PreferencesKeys
 import com.jiwondev.trep.resource.Utils
 import com.jiwondev.trep.ui.viewmodel.AuthViewModel
@@ -71,13 +74,13 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loginFlow.collectLatest {
                     when(it?.code) {
-                        200 -> {
-                            viewModel.setUserInfo(it.token, it.refreshToken)
+                        SUCCESS -> {
+                            // viewModel.setUserInfo(it.token, it.refreshToken)
                             startActivity((Intent(this@IntroActivity, MainActivity::class.java)))
                             finish()
                         }
-                        400, 404 -> Toast.makeText(this@IntroActivity, "올바른 정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
-                        null, in 500..599 -> Toast.makeText(this@IntroActivity, "서버에러", Toast.LENGTH_SHORT).show()
+                        U01_404, U02_400 -> Toast.makeText(this@IntroActivity, "올바른 정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                        null -> Toast.makeText(this@IntroActivity, "서버에러", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

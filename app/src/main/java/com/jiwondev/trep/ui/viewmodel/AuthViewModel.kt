@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.jiwondev.trep.data.repository.AuthRepository
 import com.jiwondev.trep.model.dto.LoginResponse
+import com.jiwondev.trep.model.dto.SendEmailResponse
 import com.jiwondev.trep.model.preference.UserPreferences
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,9 +22,9 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     val loginFlow: SharedFlow<LoginResponse?>
         get() = _loginFlow.asSharedFlow()
 
-    private var _sendEmailLiveData: MutableLiveData<Int> = MutableLiveData()
-    val sendEmailLiveData: LiveData<Int>
-        get() = _sendEmailLiveData
+    private var _sendEmailFlow: MutableSharedFlow<SendEmailResponse?> = MutableSharedFlow()
+    val sendEmailFlow: SharedFlow<SendEmailResponse?>
+        get() = _sendEmailFlow.asSharedFlow()
 
     // private var _codeVerified: MutableLiveData
 //    val codeVerified: LiveData<>
@@ -41,7 +42,9 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     }
 
     fun getSendEmail(email: String) = viewModelScope.launch {
-        _sendEmailLiveData.value = authRepository.getSendEmail(email)
+        authRepository.getSendEmail(email).collectLatest {
+            _sendEmailFlow.emit(it)
+        }
     }
 
     fun getVerified(email: String, key: String) = viewModelScope.launch {

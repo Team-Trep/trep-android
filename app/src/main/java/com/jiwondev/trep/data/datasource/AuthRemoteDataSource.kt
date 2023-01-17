@@ -2,6 +2,7 @@ package com.jiwondev.trep.data.datasource
 
 import android.util.Log
 import com.jiwondev.trep.model.dto.LoginResponse
+import com.jiwondev.trep.model.dto.SendEmailResponse
 import com.jiwondev.trep.network.AuthInterface
 import com.jiwondev.trep.network.Retrofit
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,24 +17,18 @@ var data: LoginResponse? = null
 
 class AuthRemoteDataSource(private val ioDispatcher: CoroutineDispatcher) {
     suspend fun login(userInfo: HashMap<String, String>): LoginResponse? {
-        withContext(ioDispatcher) {
-            val response = Retrofit.getInstance().create(AuthInterface::class.java).postLogin(userInfo)
-            when(response.isSuccessful) {
-                true -> {
-                    data = response.body()
-                    data?.code = response.code()
-                }
-                false -> data = LoginResponse(code = response.code())
-            }
+        val data = withContext(ioDispatcher) {
+            Retrofit.getInstance().create(AuthInterface::class.java).postLogin(userInfo).body()
         }
+        Log.d("data : ", data.toString())
         return data
     }
 
-    suspend fun sendEmail(email: String): Int {
-        val code = withContext(ioDispatcher) {
-            Retrofit.getInstance().create(AuthInterface::class.java).getSendEmail(email).code()
+    suspend fun sendEmail(email: String): SendEmailResponse? {
+        val response = withContext(ioDispatcher) {
+            Retrofit.getInstance().create(AuthInterface::class.java).getSendEmail(email).body()
         }
-        return code
+        return response
     }
 //
 //    suspend fun codeVeryfied(email: String, key: String) : {
