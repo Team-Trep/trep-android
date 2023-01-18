@@ -32,10 +32,14 @@ class AuthLocalDataSource(private val datastore: DataStore<Preferences>) {
     /** 데이터 쓰기 **/
     suspend fun setUserInfo(accessToken: String, refreshToken: String) {
         datastore.edit { preferences ->
-            preferences.apply {
-                this[PreferencesKeys.AUTO_LOGIN] = true
-                this[PreferencesKeys.USER_TOKEN] = accessToken
-                this[PreferencesKeys.USER_REFRESH_TOKEN] = refreshToken
+            try {
+                preferences.apply {
+                    this[PreferencesKeys.AUTO_LOGIN] = true
+                    this[PreferencesKeys.USER_TOKEN] = accessToken
+                    this[PreferencesKeys.USER_REFRESH_TOKEN] = refreshToken
+                }
+            } catch (exception: IOException) {
+                emptyPreferences()
             }
         }
     }

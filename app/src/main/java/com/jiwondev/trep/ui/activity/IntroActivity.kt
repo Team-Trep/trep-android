@@ -75,7 +75,7 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
                 viewModel.loginFlow.collectLatest {
                     when(it?.code) {
                         SUCCESS -> {
-                            // viewModel.setUserInfo(it.token, it.refreshToken)
+                            viewModel.setUserInfo(it.token, it.refreshToken)
                             startActivity((Intent(this@IntroActivity, MainActivity::class.java)))
                             finish()
                         }

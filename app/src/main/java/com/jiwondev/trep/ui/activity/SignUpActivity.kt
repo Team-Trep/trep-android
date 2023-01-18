@@ -75,19 +75,20 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.sendEmailFlow.collectLatest { it ->
-                    when(it?.code) {
-                        SUCCESS -> {
-                            binding.authCodeConstraint.visibility = View.VISIBLE
-                            binding.emailValidationButton.isEnabled = false
-                            startTimer()
-                        }
-
-                        E01_500 -> {} // 이메일 전송 실패
-
-                        E02_400 -> {} // 유효하지 않은 이메일
-
-                        null -> Toast.makeText(this@SignUpActivity, "서버에러", Toast.LENGTH_SHORT).show()
-                    }
+                    Log.d("result : ", it.toString())
+//                    when(it?.code) {
+//                        SUCCESS -> {
+//                            binding.authCodeConstraint.visibility = View.VISIBLE
+//                            binding.emailValidationButton.isEnabled = false
+//                            startTimer()
+//                        }
+//
+//                        E01_500 -> {} // 이메일 전송 실패
+//
+//                        E02_400 -> {} // 유효하지 않은 이메일
+//
+//                        null -> Toast.makeText(this@SignUpActivity, "서버에러", Toast.LENGTH_SHORT).show()
+//                    }
                 }
             }
         }

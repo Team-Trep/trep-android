@@ -52,7 +52,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     }
 
     /** Datastore write **/
-    fun setUserInfo(accessToken: String, refreshToken: String) = viewModelScope.launch {
+    suspend fun setUserInfo(accessToken: String, refreshToken: String) = viewModelScope.launch {
         authRepository.serUserInfo(accessToken, refreshToken)
     }
 }
