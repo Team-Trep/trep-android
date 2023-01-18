@@ -3,9 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentConst"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.SignUpActivity">
+
 
     <ImageView
         android:id="@+id/backButton"
@@ -19,17 +21,16 @@
         app:layout_constraintTop_toTopOf="@+id/textView5" />
 
     <TextView
-        android:textColor="@color/black"
-        style="@style/Text.MediumText16sp"
         android:id="@+id/textView5"
+        style="@style/Text.MediumText16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/sign_up"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </TextView>
+        app:layout_constraintTop_toTopOf="parent"></TextView>
 
     <ScrollView
         android:id="@+id/nestedScrollView"
@@ -88,12 +89,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/emailEditTextView"></TextView>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:visibility="visible"
                     android:id="@+id/authCodeConstraint"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="#FBFBFB"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/emailValidationButton">
@@ -241,47 +242,43 @@
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="@+id/emailValidationButton"
                     app:layout_constraintStart_toStartOf="@+id/emailValidationButton"
-                    app:layout_constraintTop_toBottomOf="@+id/passwordErrorTextView">
-                </EditText>
+                    app:layout_constraintTop_toBottomOf="@+id/passwordErrorTextView"></EditText>
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/passwordCheckErrorTextView"
                     style="@style/Text.MediumErrorText12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:text="@string/password_check_format_error"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="@+id/editText3"
-                    app:layout_constraintTop_toBottomOf="@+id/editText3">
-                </TextView>
-
+                    app:layout_constraintTop_toBottomOf="@+id/editText3"></TextView>
 
 
                 <EditText
-                    style="@style/Text.MediumText15sp"
-                    android:paddingStart="15dp"
                     android:id="@+id/editText2"
+                    style="@style/Text.MediumText15sp"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/edit_bg_grey_radius_10dp"
                     android:hint="비밀번호"
+                    android:paddingStart="15dp"
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="@+id/emailValidationButton"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/emailValidationButton"
-                    app:layout_constraintTop_toBottomOf="@+id/authCodeConstraint">
-                </EditText>
+                    app:layout_constraintTop_toBottomOf="@+id/authCodeConstraint"></EditText>
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/passwordErrorTextView"
                     style="@style/Text.MediumErrorText12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:text="@string/password_format_error"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="@+id/editText2"
                     app:layout_constraintTop_toBottomOf="@+id/editText2"></TextView>
 
@@ -297,17 +294,16 @@
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="@+id/emailValidationButton"
                     app:layout_constraintStart_toStartOf="@+id/emailValidationButton"
-                    app:layout_constraintTop_toBottomOf="@+id/passwordCheckErrorTextView">
-                </EditText>
+                    app:layout_constraintTop_toBottomOf="@+id/passwordCheckErrorTextView"></EditText>
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/nicknameErrorTextView"
                     style="@style/Text.MediumErrorText12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:text="@string/nickname_format_error"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="@+id/editText4"
                     app:layout_constraintTop_toBottomOf="@+id/editText4"></TextView>
 
@@ -348,7 +344,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="20dp"
@@ -356,8 +351,29 @@
             android:background="@drawable/btn_bg_grey_radius_6dp"
             android:gravity="center"
             android:text="@string/sign_up"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"></TextView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/progressConst"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#33000000"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ProgressBar>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

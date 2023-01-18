@@ -5,6 +5,7 @@ import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -22,6 +23,7 @@ import com.jiwondev.trep.resource.App.Companion.dataStore
 import com.jiwondev.trep.resource.Constant.Companion.E01_500
 import com.jiwondev.trep.resource.Constant.Companion.E02_400
 import com.jiwondev.trep.resource.Constant.Companion.E03_400
+import com.jiwondev.trep.resource.Constant.Companion.E06_400
 import com.jiwondev.trep.resource.Constant.Companion.SUCCESS
 import com.jiwondev.trep.ui.viewmodel.AuthViewModel
 import com.jiwondev.trep.ui.viewmodel.AuthViewModelFactory
@@ -40,11 +42,9 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
 
     private fun clickListener() {
         binding.emailValidationButton.setOnClickListener {
-             viewModel.getSendEmail(binding.emailEditTextView.text.toString())
-
-            // 200일 때
-
-
+            binding.progressConst.visibility = View.VISIBLE
+            Toast.makeText(this, "인증코드를 전송중입니다. 잠시만 기다려주세요", Toast.LENGTH_SHORT).show()
+            viewModel.getSendEmail(binding.emailEditTextView.text.toString())
         }
 
         binding.backButton.setOnClickListener {
@@ -56,8 +56,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
         }
 
         binding.emailResendTextView.setOnClickListener {
-            // viewModel.getSendEmail(binding.emailEditTextView.text.toString())
-            // 3분 이전에도 보낼 수 있는지?
+
         }
     }
 
@@ -75,20 +74,33 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.sendEmailFlow.collectLatest { it ->
-                    Log.d("result : ", it.toString())
-//                    when(it?.code) {
-//                        SUCCESS -> {
-//                            binding.authCodeConstraint.visibility = View.VISIBLE
-//                            binding.emailValidationButton.isEnabled = false
-//                            startTimer()
-//                        }
-//
-//                        E01_500 -> {} // 이메일 전송 실패
-//
-//                        E02_400 -> {} // 유효하지 않은 이메일
-//
-//                        null -> Toast.makeText(this@SignUpActivity, "서버에러", Toast.LENGTH_SHORT).show()
-//                    }
+                    when(it?.code) {
+                        SUCCESS -> {
+                            Toast.makeText(this@SignUpActivity, "인증번호가 발송되었습니다.", Toast.LENGTH_SHORT).show()
+                            binding.progressConst.visibility = View.GONE
+                            binding.authCodeConstraint.visibility = View.VISIBLE
+                            binding.emailValidationButton.isEnabled = false
+                            startTimer()
+                        }
+
+                        /** 이메일 전송 실패 **/
+                        E01_500, null -> {
+                            Toast.makeText(this@SignUpActivity, "이메일 전송에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            binding.progressConst.visibility = View.GONE
+                        }
+
+                        /** 유효하지 않은 이메일**/
+                        E02_400 -> {
+                            Toast.makeText(this@SignUpActivity, "유효하지 않은 이메일입니다.", Toast.LENGTH_SHORT).show()
+                            binding.progressConst.visibility = View.GONE
+                        }
+
+                        /** 이메일이 전소된지 1분 미만 **/
+                        E06_400 -> {
+                            Toast.makeText(this@SignUpActivity, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                            binding.progressConst.visibility = View.GONE
+                        }
+                    }
                 }
             }
         }
