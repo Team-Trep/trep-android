@@ -6,9 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Message
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +30,7 @@ import com.jiwondev.trep.resource.Constant.Companion.E02_400
 import com.jiwondev.trep.resource.Constant.Companion.E03_400
 import com.jiwondev.trep.resource.Constant.Companion.E06_400
 import com.jiwondev.trep.resource.Constant.Companion.SUCCESS
+import com.jiwondev.trep.resource.Utils
 import com.jiwondev.trep.ui.viewmodel.AuthViewModel
 import com.jiwondev.trep.ui.viewmodel.AuthViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
@@ -46,6 +52,44 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
             Toast.makeText(this, "인증코드를 전송중입니다. 잠시만 기다려주세요", Toast.LENGTH_SHORT).show()
             viewModel.getSendEmail(binding.emailEditTextView.text.toString())
         }
+
+        /** 이메일 EditText **/
+        binding.emailEditTextView.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(inputResult: Editable?) {
+                when(Utils.checkEmailRegex(inputResult.toString())) {
+                    true -> updateUi(binding.signUpEmailFormatErrorTextView, binding.emailEditTextView, true)
+                    false -> updateUi(binding.signUpEmailFormatErrorTextView, binding.emailEditTextView, false)
+                }
+            }
+        })
+
+        /** 패스워드 EditText **/
+        binding.signUpPasswordEditText.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(inputResult: Editable?) {
+                when(Utils.checkPasswordRegex(inputResult.toString())) {
+                    true -> updateUi(binding.passwordErrorTextView, binding.signUpPasswordEditText, true)
+                    false -> updateUi(binding.passwordErrorTextView, binding.signUpPasswordEditText, false)
+                }
+            }
+        })
+
+        /** 패스워드 확인 EditText **/
+        binding.signUpPasswordCheckEditText.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(inputResult: Editable?) {
+                when(inputResult.toString() == binding.signUpPasswordEditText.text.toString()) {
+                    true -> updateUi(binding.passwordCheckErrorTextView, binding.signUpPasswordCheckEditText, true)
+                    false -> updateUi(binding.passwordCheckErrorTextView, binding.signUpPasswordCheckEditText, false)
+                }
+            }
+        })
+
+
 
         binding.backButton.setOnClickListener {
 
@@ -127,6 +171,18 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
             }
         }
         viewModel.countDownTimer!!.start()
+    }
+
+    private fun updateUi(textView: TextView, editText: EditText, visible: Boolean) {
+        /** AppCompatResources : Resource에 엑세스 하기 위해서 사용. **/
+        if(visible) {
+            textView.visibility = View.GONE
+            editText.background = AppCompatResources.getDrawable(this@SignUpActivity, R.drawable.edit_bg_grey_radius_10dp)
+
+        } else {
+            textView.visibility = View.VISIBLE
+            editText.background = AppCompatResources.getDrawable(this@SignUpActivity, R.drawable.edit_error_bg_grey_radius_10dp)
+        }
     }
 
     override fun onDestroy() {

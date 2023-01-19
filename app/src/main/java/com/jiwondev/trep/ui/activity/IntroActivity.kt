@@ -96,7 +96,7 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
             )
         }
 
-        binding.signUpTextView.setOnClickListener {
+        binding.introSignUpTextView.setOnClickListener {
             startActivity((Intent(this, SignUpActivity::class.java)))
         }
 
