@@ -2,6 +2,7 @@ package com.jiwondev.trep.data.datasource
 
 import android.util.Log
 import com.bumptech.glide.util.Util
+import com.jiwondev.trep.model.dto.EmailCodeVerifyResponse
 import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.model.dto.SendEmailResponse
 import com.jiwondev.trep.network.AuthInterface
@@ -39,8 +40,15 @@ class AuthRemoteDataSource(private val ioDispatcher: CoroutineDispatcher) {
             SendEmailResponse(code = Utils.parseErrorBodyCode(response.errorBody()))
         }
     }
-//
-//    suspend fun codeVeryfied(email: String, key: String) : {
-//
-//    }
+
+    suspend fun codeVerify(email: String, key: String): EmailCodeVerifyResponse? {
+        val response = withContext(ioDispatcher) {
+            Retrofit.getInstance().create(AuthInterface::class.java).getCodeVerify(email, key)
+        }
+        return if(response.isSuccessful) {
+            response.body()?.let { EmailCodeVerifyResponse(verified = it.verified) }
+        } else  {
+            EmailCodeVerifyResponse(code = Utils.parseErrorBodyCode(response.errorBody()))
+        }
+    }
 }

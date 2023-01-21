@@ -1,5 +1,6 @@
 package com.jiwondev.trep.network
 
+import com.jiwondev.trep.model.dto.EmailCodeVerifyResponse
 import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.model.dto.SendEmailResponse
 import com.jiwondev.trep.resource.Constant.Companion.POST_LOGIN
@@ -7,6 +8,7 @@ import com.jiwondev.trep.resource.Constant.Companion.POST_REFRESH_TOKEN
 import com.jiwondev.trep.resource.Constant.Companion.POST_SIGN_UP
 import com.jiwondev.trep.resource.Constant.Companion.TEST_VIDEO
 import com.jiwondev.trep.resource.Constant.Companion.USER_EMAIL_SEND
+import com.jiwondev.trep.resource.Constant.Companion.USER_EMAIL_VERIFY
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -41,6 +43,12 @@ interface AuthInterface {
     suspend fun getSendEmail(
         @Query("email") email: String,
     ) : Response<SendEmailResponse>
+
+    @GET(USER_EMAIL_VERIFY)
+    suspend fun getCodeVerify(
+        @Query("email") email: String,
+        @Query("key") key: String
+    ) : Response<EmailCodeVerifyResponse>
 
     @POST(TEST_VIDEO)
     suspend fun postTestVideo(

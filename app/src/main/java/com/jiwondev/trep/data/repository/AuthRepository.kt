@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.datastore.preferences.core.emptyPreferences
 import com.jiwondev.trep.data.datasource.AuthLocalDataSource
 import com.jiwondev.trep.data.datasource.AuthRemoteDataSource
+import com.jiwondev.trep.model.dto.EmailCodeVerifyResponse
 import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.model.dto.SendEmailResponse
 import com.jiwondev.trep.model.preference.UserPreferences
@@ -33,7 +34,9 @@ class AuthRepository(private val authRemoteDataSource: AuthRemoteDataSource, pri
         emit(authRemoteDataSource.sendEmail(email))
     }
 
-//    suspend fun getVeryfied(email: String, key: String)
+    suspend fun getCodeVerify(email: String, key: String): Flow<EmailCodeVerifyResponse?> = flow {
+        emit(authRemoteDataSource.codeVerify(email, key))
+    }
 
 
 

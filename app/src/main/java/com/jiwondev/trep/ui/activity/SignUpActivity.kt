@@ -47,10 +47,25 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
     }
 
     private fun clickListener() {
+        /** 이메일 전송 **/
         binding.emailValidationButton.setOnClickListener {
-            binding.progressConst.visibility = View.VISIBLE
-            Toast.makeText(this, "인증코드를 전송중입니다. 잠시만 기다려주세요", Toast.LENGTH_SHORT).show()
-            viewModel.getSendEmail(binding.emailEditTextView.text.toString())
+            if(binding.emailEditTextView.text.toString().isNotEmpty()) {
+                binding.progressConst.visibility = View.VISIBLE
+                Toast.makeText(this, "인증코드를 전송중입니다. 잠시만 기다려주세요", Toast.LENGTH_SHORT).show()
+                viewModel.email = binding.emailEditTextView.text.toString()
+                viewModel.getSendEmail(binding.emailEditTextView.text.toString())
+            } else {
+                Toast.makeText(this, "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        /** 인증코드 인증 **/
+        binding.codeValidationButton.setOnClickListener {
+            if(binding.codeEditTextView.text.toString().isNotEmpty()) {
+                viewModel.getVerified(email = viewModel.email, key = binding.codeEditTextView.text.toString())
+            } else {
+                Toast.makeText(this, "인증코드를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         /** 이메일 EditText **/
@@ -95,10 +110,6 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
 
         }
 
-        binding.codeValidationButton.setOnClickListener {
-
-        }
-
         binding.emailResendTextView.setOnClickListener {
 
         }
@@ -117,6 +128,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                /** 에미일 인증 **/
                 viewModel.sendEmailFlow.collectLatest { it ->
                     when(it?.code) {
                         SUCCESS -> {
@@ -146,6 +158,24 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
                         }
                     }
                 }
+
+                /** 인증코드 인증 **/
+                viewModel.codeVerified.collectLatest {
+                    when(it?.code) {
+                        SUCCESS -> {
+                            if(it.verified) {
+                                Toast.makeText(this@SignUpActivity, "인증되었습니다.", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(this@SignUpActivity, "인증번호가 다릅니다.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        E03_400 -> Toast.makeText(this@SignUpActivity, "인증번호가 만료되었습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                        E06_400 -> Toast.makeText(this@SignUpActivity, "이미 인증된 이메일입니다.", Toast.LENGTH_SHORT).show()
+                        null -> Toast.makeText(this@SignUpActivity, "서버에러", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+
             }
         }
 
