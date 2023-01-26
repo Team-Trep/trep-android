@@ -7,6 +7,7 @@ import com.jiwondev.trep.data.repository.AuthRepository
 import com.jiwondev.trep.model.dto.EmailCodeVerifyResponse
 import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.model.dto.SendEmailResponse
+import com.jiwondev.trep.model.dto.SignUpResponse
 import com.jiwondev.trep.model.preference.UserPreferences
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -31,9 +32,15 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         get() = _sendEmailFlow.asSharedFlow()
 
     /** 인증코드 확인 **/
-     private var _codeVerified: MutableSharedFlow<EmailCodeVerifyResponse?> = MutableSharedFlow()
-     val codeVerified: SharedFlow<EmailCodeVerifyResponse?>
-        get() = _codeVerified.asSharedFlow()
+     private var _codeVerifiedFlow: MutableSharedFlow<EmailCodeVerifyResponse?> = MutableSharedFlow()
+     val codeVerifiedFlow: SharedFlow<EmailCodeVerifyResponse?>
+        get() = _codeVerifiedFlow.asSharedFlow()
+
+    /** 회원가입 **/
+    private var _signUpFlow: MutableSharedFlow<SignUpResponse?> = MutableSharedFlow()
+    val signUpFlow: SharedFlow<SignUpResponse?>
+        get() = _signUpFlow.asSharedFlow()
+
 
 
     /** 로그인 **/
@@ -57,7 +64,19 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     /** 인증코드 인증 **/
     fun getVerified(email: String, key: String) = viewModelScope.launch {
         authRepository.getCodeVerify(email, key).collectLatest {
-            _codeVerified.emit(it)
+            _codeVerifiedFlow.emit(it)
+        }
+    }
+
+    /** 회원가입 **/
+    fun signUp(emailAddress: String, password: String, nickname: String) = viewModelScope.launch {
+        val body = HashMap<String, String>()
+        body["emailAddress"] = emailAddress
+        body["nickname"] = nickname
+        body["password"] = password
+
+        authRepository.postSignUp(body).collectLatest {
+            _signUpFlow.emit(it)
         }
     }
 

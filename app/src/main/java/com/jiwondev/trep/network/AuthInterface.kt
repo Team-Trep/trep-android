@@ -3,6 +3,7 @@ package com.jiwondev.trep.network
 import com.jiwondev.trep.model.dto.EmailCodeVerifyResponse
 import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.model.dto.SendEmailResponse
+import com.jiwondev.trep.model.dto.SignUpResponse
 import com.jiwondev.trep.resource.Constant.Companion.POST_LOGIN
 import com.jiwondev.trep.resource.Constant.Companion.POST_REFRESH_TOKEN
 import com.jiwondev.trep.resource.Constant.Companion.POST_SIGN_UP
@@ -22,7 +23,7 @@ interface AuthInterface {
     @POST(POST_SIGN_UP)
     suspend fun postSignUp(
         @Body userInfo: HashMap<String, String>
-    ) : Response<String>
+    ) : Response<SignUpResponse>
 
     /** 로그인 **/
     @POST(POST_LOGIN)
@@ -44,6 +45,7 @@ interface AuthInterface {
         @Query("email") email: String,
     ) : Response<SendEmailResponse>
 
+    /** 코드 인증 **/
     @GET(USER_EMAIL_VERIFY)
     suspend fun getCodeVerify(
         @Query("email") email: String,

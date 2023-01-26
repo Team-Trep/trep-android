@@ -5,7 +5,7 @@ class Constant {
         const val TREP_PREFERENCE_NAME = "trep_preference" // datastore name
 
         /** api **/
-        const val BASE_URL = "http://api-dev.net/"
+        const val BASE_URL = "https://api-dev.net/"
         const val POST_SIGN_UP = "user/register" // 회원가입
         const val POST_LOGIN = "user/login" // 로그인
         const val POST_REFRESH_TOKEN = "user/refresh" // 토큰 재발급
@@ -21,7 +21,7 @@ class Constant {
         const val U02_400 = "U02" // 패스워드 불일치
         const val U03_400 = "U03" // 유효하지 않은 토큰
         const val U04_400 = "U04" // 토큰, 리프레시 토큰이 서로 일치하지 않음
-        const val U05_404 = "U05" // 회원가입 데이터가 비어있음
+        const val U05_400 = "U05" // 회원가입 데이터가 비어있음
         const val U06_400 = "U06" // 이미 존재하는 회원
         const val U07_400 = "U07" // 이미 존재하는 닉네임
         const val U08_400 = "U08" // 토큰 기한 만료

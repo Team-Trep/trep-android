@@ -7,6 +7,7 @@ import com.jiwondev.trep.data.datasource.AuthRemoteDataSource
 import com.jiwondev.trep.model.dto.EmailCodeVerifyResponse
 import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.model.dto.SendEmailResponse
+import com.jiwondev.trep.model.dto.SignUpResponse
 import com.jiwondev.trep.model.preference.UserPreferences
 import com.jiwondev.trep.network.AuthInterface
 import com.jiwondev.trep.network.Retrofit
@@ -36,6 +37,10 @@ class AuthRepository(private val authRemoteDataSource: AuthRemoteDataSource, pri
 
     suspend fun getCodeVerify(email: String, key: String): Flow<EmailCodeVerifyResponse?> = flow {
         emit(authRemoteDataSource.codeVerify(email, key))
+    }
+
+    suspend fun postSignUp(body: HashMap<String, String>): Flow<SignUpResponse?> = flow {
+        emit(authRemoteDataSource.signUp(body))
     }
 
 

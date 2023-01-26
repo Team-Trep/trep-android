@@ -293,7 +293,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/signUpPasswordEditText"></TextView>
 
                 <EditText
-                    android:id="@+id/signUpNicknameTextView"
+                    android:id="@+id/signUpNicknameEditTextView"
                     style="@style/Text.MediumText15sp"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
@@ -314,8 +314,8 @@
                     android:layout_marginTop="6dp"
                     android:text="@string/nickname_format_error"
                     android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="@+id/signUpNicknameTextView"
-                    app:layout_constraintTop_toBottomOf="@+id/signUpNicknameTextView"></TextView>
+                    app:layout_constraintStart_toStartOf="@+id/signUpNicknameEditTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/signUpNicknameEditTextView"></TextView>
 
                 <TextView
                     android:id="@+id/textView"

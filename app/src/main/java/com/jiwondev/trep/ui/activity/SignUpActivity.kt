@@ -28,8 +28,13 @@ import com.jiwondev.trep.resource.App.Companion.dataStore
 import com.jiwondev.trep.resource.Constant.Companion.E01_500
 import com.jiwondev.trep.resource.Constant.Companion.E02_400
 import com.jiwondev.trep.resource.Constant.Companion.E03_400
+import com.jiwondev.trep.resource.Constant.Companion.E04_400
+import com.jiwondev.trep.resource.Constant.Companion.E05_400
 import com.jiwondev.trep.resource.Constant.Companion.E06_400
 import com.jiwondev.trep.resource.Constant.Companion.SUCCESS
+import com.jiwondev.trep.resource.Constant.Companion.U05_400
+import com.jiwondev.trep.resource.Constant.Companion.U06_400
+import com.jiwondev.trep.resource.Constant.Companion.U07_400
 import com.jiwondev.trep.resource.Utils
 import com.jiwondev.trep.ui.viewmodel.AuthViewModel
 import com.jiwondev.trep.ui.viewmodel.AuthViewModelFactory
@@ -156,11 +161,16 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
                             Toast.makeText(this@SignUpActivity, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                             binding.progressConst.visibility = View.GONE
                         }
+
+                        /** 이미 인증된 이메일 **/
+                        E05_400 -> {
+
+                        }
                     }
                 }
 
                 /** 인증코드 인증 **/
-                viewModel.codeVerified.collectLatest {
+                viewModel.codeVerifiedFlow.collectLatest {
                     when(it?.code) {
                         SUCCESS -> {
                             if(it.verified) {
@@ -175,7 +185,32 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
                     }
                 }
 
+                /** 회원가입 **/
+                viewModel.signUpFlow.collectLatest {
+                    when(it?.code) {
+                        SUCCESS -> {
+                            Toast.makeText(this@SignUpActivity, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
 
+                        /** 닉네임 중복 **/
+                        U07_400 -> {
+                            Toast.makeText(this@SignUpActivity, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT).show()
+                            binding.nicknameErrorTextView.visibility = View.VISIBLE
+                            binding.signUpNicknameEditTextView.background = AppCompatResources.getDrawable(this@SignUpActivity, R.drawable.edit_error_bg_grey_radius_10dp)
+
+                        }
+
+                        /** 회원가입 데이터 없음 **/
+                        U05_400 -> Toast.makeText(this@SignUpActivity, "정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
+
+                        /** 이미 존재하는 회원 **/
+                        U06_400 -> Toast.makeText(this@SignUpActivity, "이미 가입된 회원입니다.", Toast.LENGTH_SHORT).show()
+
+                        /** 이메일이 인증되지 않음 **/
+                        E04_400 -> Toast.makeText(this@SignUpActivity, "이메일을 인증해주세요.", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 
