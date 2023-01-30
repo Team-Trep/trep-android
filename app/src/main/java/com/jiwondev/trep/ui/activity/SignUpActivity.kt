@@ -48,6 +48,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
         super.onCreate(savedInstanceState)
 
         init()
+        collectFlows()
         clickListener()
     }
 
@@ -57,7 +58,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
             if(binding.emailEditTextView.text.toString().isNotEmpty()) {
                 binding.progressConst.visibility = View.VISIBLE
                 Toast.makeText(this, "인증코드를 전송중입니다. 잠시만 기다려주세요", Toast.LENGTH_SHORT).show()
-                viewModel.email = binding.emailEditTextView.text.toString()
+                viewModel.email = "wonhye2724@naver.com" // binding.emailEditTextView.text.toString()
                 viewModel.getSendEmail(binding.emailEditTextView.text.toString())
             } else {
                 Toast.makeText(this, "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -118,6 +119,10 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
         binding.emailResendTextView.setOnClickListener {
 
         }
+
+        binding.signUpTextView.setOnClickListener {
+            viewModel.signUp("", "", "")
+        }
     }
 
     private fun init() {
@@ -131,90 +136,100 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
             )
         )[AuthViewModel::class.java]
 
+        binding.emailResendTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+    }
+
+    private fun collectFlows() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 /** 에미일 인증 **/
-                viewModel.sendEmailFlow.collectLatest { it ->
-                    when(it?.code) {
-                        SUCCESS -> {
-                            Toast.makeText(this@SignUpActivity, "인증번호가 발송되었습니다.", Toast.LENGTH_SHORT).show()
-                            binding.progressConst.visibility = View.GONE
-                            binding.authCodeConstraint.visibility = View.VISIBLE
-                            binding.emailValidationButton.isEnabled = false
-                            startTimer()
-                        }
+                launch {
+                    viewModel.sendEmailFlow.collectLatest { it ->
+                        when(it?.code) {
+                            SUCCESS -> {
+                                Toast.makeText(this@SignUpActivity, "인증번호가 발송되었습니다.", Toast.LENGTH_SHORT).show()
+                                binding.progressConst.visibility = View.GONE
+                                binding.authCodeConstraint.visibility = View.VISIBLE
+                                binding.emailValidationButton.isEnabled = false
+                                startTimer()
+                            }
 
-                        /** 이메일 전송 실패 **/
-                        E01_500, null -> {
-                            Toast.makeText(this@SignUpActivity, "이메일 전송에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                            binding.progressConst.visibility = View.GONE
-                        }
+                            /** 이메일 전송 실패 **/
+                            E01_500, null -> {
+                                Toast.makeText(this@SignUpActivity, "이메일 전송에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                binding.progressConst.visibility = View.GONE
+                            }
 
-                        /** 유효하지 않은 이메일**/
-                        E02_400 -> {
-                            Toast.makeText(this@SignUpActivity, "유효하지 않은 이메일입니다.", Toast.LENGTH_SHORT).show()
-                            binding.progressConst.visibility = View.GONE
-                        }
+                            /** 유효하지 않은 이메일**/
+                            E02_400 -> {
+                                Toast.makeText(this@SignUpActivity, "유효하지 않은 이메일입니다.", Toast.LENGTH_SHORT).show()
+                                binding.progressConst.visibility = View.GONE
+                            }
 
-                        /** 이메일이 전소된지 1분 미만 **/
-                        E06_400 -> {
-                            Toast.makeText(this@SignUpActivity, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                            binding.progressConst.visibility = View.GONE
-                        }
+                            /** 이메일이 전소된지 1분 미만 **/
+                            E06_400 -> {
+                                Toast.makeText(this@SignUpActivity, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                                binding.progressConst.visibility = View.GONE
+                            }
 
-                        /** 이미 인증된 이메일 **/
-                        E05_400 -> {
+                            /** 이미 인증된 이메일 **/
+                            E05_400 -> {
 
-                        }
-                    }
-                }
-
-                /** 인증코드 인증 **/
-                viewModel.codeVerifiedFlow.collectLatest {
-                    when(it?.code) {
-                        SUCCESS -> {
-                            if(it.verified) {
-                                Toast.makeText(this@SignUpActivity, "인증되었습니다.", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(this@SignUpActivity, "인증번호가 다릅니다.", Toast.LENGTH_SHORT).show()
                             }
                         }
-                        E03_400 -> Toast.makeText(this@SignUpActivity, "인증번호가 만료되었습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                        E06_400 -> Toast.makeText(this@SignUpActivity, "이미 인증된 이메일입니다.", Toast.LENGTH_SHORT).show()
-                        null -> Toast.makeText(this@SignUpActivity, "서버에러", Toast.LENGTH_SHORT).show()
                     }
                 }
 
-                /** 회원가입 **/
-                viewModel.signUpFlow.collectLatest {
-                    when(it?.code) {
-                        SUCCESS -> {
-                            Toast.makeText(this@SignUpActivity, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                            finish()
+                launch {
+                    /** 인증코드 인증 **/
+                    viewModel.codeVerifiedFlow.collectLatest {
+                        when(it?.code) {
+                            SUCCESS -> {
+                                if(it.verified) {
+                                    Toast.makeText(this@SignUpActivity, "인증되었습니다.", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(this@SignUpActivity, "인증번호가 다릅니다.", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            E03_400 -> Toast.makeText(this@SignUpActivity, "인증번호가 만료되었습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                            E06_400 -> Toast.makeText(this@SignUpActivity, "이미 인증된 이메일입니다.", Toast.LENGTH_SHORT).show()
+                            null -> Toast.makeText(this@SignUpActivity, "서버에러", Toast.LENGTH_SHORT).show()
+                            else -> Toast.makeText(this@SignUpActivity, "test : ${it.toString()}", Toast.LENGTH_SHORT).show()
                         }
+                    }
+                }
 
-                        /** 닉네임 중복 **/
-                        U07_400 -> {
-                            Toast.makeText(this@SignUpActivity, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT).show()
-                            binding.nicknameErrorTextView.visibility = View.VISIBLE
-                            binding.signUpNicknameEditTextView.background = AppCompatResources.getDrawable(this@SignUpActivity, R.drawable.edit_error_bg_grey_radius_10dp)
+                launch {
 
+                    /** 회원가입 **/
+                    viewModel.signUpFlow.collectLatest {
+                        when(it?.code) {
+                            SUCCESS -> {
+                                Toast.makeText(this@SignUpActivity, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                                finish()
+                            }
+
+                            /** 닉네임 중복 **/
+                            U07_400 -> {
+                                Toast.makeText(this@SignUpActivity, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT).show()
+                                binding.nicknameErrorTextView.visibility = View.VISIBLE
+                                binding.signUpNicknameEditTextView.background = AppCompatResources.getDrawable(this@SignUpActivity, R.drawable.edit_error_bg_grey_radius_10dp)
+
+                            }
+
+                            /** 회원가입 데이터 없음 **/
+                            U05_400 -> Toast.makeText(this@SignUpActivity, "정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
+
+                            /** 이미 존재하는 회원 **/
+                            U06_400 -> Toast.makeText(this@SignUpActivity, "이미 가입된 회원입니다.", Toast.LENGTH_SHORT).show()
+
+                            /** 이메일이 인증되지 않음 **/
+                            E04_400 -> Toast.makeText(this@SignUpActivity, "이메일을 인증해주세요.", Toast.LENGTH_SHORT).show()
                         }
-
-                        /** 회원가입 데이터 없음 **/
-                        U05_400 -> Toast.makeText(this@SignUpActivity, "정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
-
-                        /** 이미 존재하는 회원 **/
-                        U06_400 -> Toast.makeText(this@SignUpActivity, "이미 가입된 회원입니다.", Toast.LENGTH_SHORT).show()
-
-                        /** 이메일이 인증되지 않음 **/
-                        E04_400 -> Toast.makeText(this@SignUpActivity, "이메일을 인증해주세요.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
-
-        binding.emailResendTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 
 

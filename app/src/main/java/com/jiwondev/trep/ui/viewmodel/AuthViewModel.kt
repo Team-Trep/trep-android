@@ -64,6 +64,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     /** 인증코드 인증 **/
     fun getVerified(email: String, key: String) = viewModelScope.launch {
         authRepository.getCodeVerify(email, key).collectLatest {
+            Log.d("getVerified : ", "test : ${it.toString()}")
             _codeVerifiedFlow.emit(it)
         }
     }

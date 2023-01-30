@@ -42,13 +42,16 @@ class AuthRemoteDataSource(private val ioDispatcher: CoroutineDispatcher) {
         }
     }
 
-    suspend fun codeVerify(email: String, key: String): EmailCodeVerifyResponse? {
+    suspend fun codeVerify(email: String, key: String): EmailCodeVerifyResponse {
         val response = withContext(ioDispatcher) {
             Retrofit.getInstance().create(AuthInterface::class.java).getCodeVerify(email, key)
         }
+        Log.d("codeResponse : ", "res : ${response.body().toString()}")
         return if(response.isSuccessful) {
-            response.body()?.let { EmailCodeVerifyResponse(verified = it.verified) }
+            Log.d("isSuccess : ", "true")
+            EmailCodeVerifyResponse(verified = response.body()?.verified ?: false)
         } else  {
+            Log.d("isSuccess : ", "false")
             EmailCodeVerifyResponse(code = Utils.parseErrorBodyCode(response.errorBody()))
         }
     }

@@ -36,6 +36,7 @@ class AuthRepository(private val authRemoteDataSource: AuthRemoteDataSource, pri
     }
 
     suspend fun getCodeVerify(email: String, key: String): Flow<EmailCodeVerifyResponse?> = flow {
+        Log.d("getCodeVerify : ", "getCodeVerify")
         emit(authRemoteDataSource.codeVerify(email, key))
     }
 
