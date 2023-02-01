@@ -49,16 +49,15 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
 
         init()
         collectFlows()
-        clickListener()
+        listener()
     }
 
-    private fun clickListener() {
+    private fun listener() {
         /** 이메일 전송 **/
         binding.emailValidationButton.setOnClickListener {
             if(binding.emailEditTextView.text.toString().isNotEmpty()) {
-                binding.progressConst.visibility = View.VISIBLE
-                Toast.makeText(this, "인증코드를 전송중입니다. 잠시만 기다려주세요", Toast.LENGTH_SHORT).show()
-                viewModel.email = "wonhye2724@naver.com" // binding.emailEditTextView.text.toString()
+                updateProgressMessageUi("인증코드를 전송중입니다. 잠시만 기다려주세요")
+                viewModel.email = binding.emailEditTextView.text.toString()
                 viewModel.getSendEmail(binding.emailEditTextView.text.toString())
             } else {
                 Toast.makeText(this, "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -80,8 +79,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(inputResult: Editable?) {
                 when(Utils.checkEmailRegex(inputResult.toString())) {
-                    true -> updateUi(binding.signUpEmailFormatErrorTextView, binding.emailEditTextView, true)
-                    false -> updateUi(binding.signUpEmailFormatErrorTextView, binding.emailEditTextView, false)
+                    true -> updateEditTextUi(binding.signUpEmailFormatErrorTextView, binding.emailEditTextView, true)
+                    false -> updateEditTextUi(binding.signUpEmailFormatErrorTextView, binding.emailEditTextView, false)
                 }
             }
         })
@@ -92,8 +91,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(inputResult: Editable?) {
                 when(Utils.checkPasswordRegex(inputResult.toString())) {
-                    true -> updateUi(binding.passwordErrorTextView, binding.signUpPasswordEditText, true)
-                    false -> updateUi(binding.passwordErrorTextView, binding.signUpPasswordEditText, false)
+                    true -> updateEditTextUi(binding.passwordErrorTextView, binding.signUpPasswordEditText, true)
+                    false -> updateEditTextUi(binding.passwordErrorTextView, binding.signUpPasswordEditText, false)
                 }
             }
         })
@@ -104,8 +103,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(inputResult: Editable?) {
                 when(inputResult.toString() == binding.signUpPasswordEditText.text.toString()) {
-                    true -> updateUi(binding.passwordCheckErrorTextView, binding.signUpPasswordCheckEditText, true)
-                    false -> updateUi(binding.passwordCheckErrorTextView, binding.signUpPasswordCheckEditText, false)
+                    true -> updateEditTextUi(binding.passwordCheckErrorTextView, binding.signUpPasswordCheckEditText, true)
+                    false -> updateEditTextUi(binding.passwordCheckErrorTextView, binding.signUpPasswordCheckEditText, false)
                 }
             }
         })
@@ -116,12 +115,19 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
 
         }
 
+        /** 이메일 재전송 **/
         binding.emailResendTextView.setOnClickListener {
-
+            updateProgressMessageUi("인증코드를 전송중입니다. 잠시만 기다려주세요")
+            viewModel.email = binding.emailEditTextView.text.toString()
+            viewModel.getSendEmail(binding.emailEditTextView.text.toString())
         }
 
         binding.signUpTextView.setOnClickListener {
-            viewModel.signUp("", "", "")
+            viewModel.signUp(
+                viewModel.email,
+                binding.signUpPasswordEditText.text.toString().trim(),
+                binding.signUpNicknameEditTextView.text.toString().trim()
+            )
         }
     }
 
@@ -142,40 +148,21 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
     private fun collectFlows() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                /** 에미일 인증 **/
+                /** 이메일 인증 **/
                 launch {
                     viewModel.sendEmailFlow.collectLatest { it ->
                         when(it?.code) {
                             SUCCESS -> {
-                                Toast.makeText(this@SignUpActivity, "인증번호가 발송되었습니다.", Toast.LENGTH_SHORT).show()
-                                binding.progressConst.visibility = View.GONE
+                                updateProgressMessageUi("인증번호가 발송되었습니다.")
                                 binding.authCodeConstraint.visibility = View.VISIBLE
                                 binding.emailValidationButton.isEnabled = false
                                 startTimer()
                             }
 
-                            /** 이메일 전송 실패 **/
-                            E01_500, null -> {
-                                Toast.makeText(this@SignUpActivity, "이메일 전송에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                                binding.progressConst.visibility = View.GONE
-                            }
-
-                            /** 유효하지 않은 이메일**/
-                            E02_400 -> {
-                                Toast.makeText(this@SignUpActivity, "유효하지 않은 이메일입니다.", Toast.LENGTH_SHORT).show()
-                                binding.progressConst.visibility = View.GONE
-                            }
-
-                            /** 이메일이 전소된지 1분 미만 **/
-                            E06_400 -> {
-                                Toast.makeText(this@SignUpActivity, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                                binding.progressConst.visibility = View.GONE
-                            }
-
-                            /** 이미 인증된 이메일 **/
-                            E05_400 -> {
-
-                            }
+                            E01_500, null -> updateProgressMessageUi("이메일 전송에 실패했습니다.")
+                            E02_400 -> updateProgressMessageUi("유효하지 않은 이메일입니다.")
+                            E06_400 -> updateProgressMessageUi("이메일이 전송된지 1분 미만입니다. 잠시후 다시 시도해주세요.")
+                            E05_400 -> updateProgressMessageUi("이미 인증된 이메일 입니다.")
                         }
                     }
                 }
@@ -186,7 +173,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
                         when(it?.code) {
                             SUCCESS -> {
                                 if(it.verified) {
-                                    Toast.makeText(this@SignUpActivity, "인증되었습니다.", Toast.LENGTH_SHORT).show()
+                                    updateProgressMessageUi("인증되었습니다.")
+                                    viewModel.countDownTimer?.onFinish()
                                 } else {
                                     Toast.makeText(this@SignUpActivity, "인증번호가 다릅니다.", Toast.LENGTH_SHORT).show()
                                 }
@@ -200,7 +188,6 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
                 }
 
                 launch {
-
                     /** 회원가입 **/
                     viewModel.signUpFlow.collectLatest {
                         when(it?.code) {
@@ -216,14 +203,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
                                 binding.signUpNicknameEditTextView.background = AppCompatResources.getDrawable(this@SignUpActivity, R.drawable.edit_error_bg_grey_radius_10dp)
 
                             }
-
-                            /** 회원가입 데이터 없음 **/
-                            U05_400 -> Toast.makeText(this@SignUpActivity, "정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
-
-                            /** 이미 존재하는 회원 **/
+                            U05_400 -> Toast.makeText(this@SignUpActivity, "정보를 입력해주세요.", Toast.LENGTH_SHORT).show() // 회원가입 데이터 없음
                             U06_400 -> Toast.makeText(this@SignUpActivity, "이미 가입된 회원입니다.", Toast.LENGTH_SHORT).show()
-
-                            /** 이메일이 인증되지 않음 **/
                             E04_400 -> Toast.makeText(this@SignUpActivity, "이메일을 인증해주세요.", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -234,15 +215,15 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
 
 
     private fun startTimer() {
-        // 3분
+        viewModel.countDownTimer?.cancel()
+        var time = 180
         viewModel.countDownTimer = object : CountDownTimer(180000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                Log.d("millisUntilFinished : ", millisUntilFinished.toString())
-                viewModel.time--
-                binding.minuteTextView.text = "0${viewModel.time/60}:"
+                time--
+                binding.minuteTextView.text = "0${time/60}:"
                 when {
-                    viewModel.time%60 >= 10 -> binding.secondTextView.text = "${viewModel.time%60}"
-                    else -> binding.secondTextView.text = "0${viewModel.time%60}"
+                    time%60 >= 10 -> binding.secondTextView.text = "${time%60}"
+                    else -> binding.secondTextView.text = "0${time%60}"
                 }
             }
 
@@ -253,7 +234,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
         viewModel.countDownTimer!!.start()
     }
 
-    private fun updateUi(textView: TextView, editText: EditText, visible: Boolean) {
+    private fun updateEditTextUi(textView: TextView, editText: EditText, visible: Boolean) {
         /** AppCompatResources : Resource에 엑세스 하기 위해서 사용. **/
         if(visible) {
             textView.visibility = View.GONE
@@ -263,6 +244,11 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
             textView.visibility = View.VISIBLE
             editText.background = AppCompatResources.getDrawable(this@SignUpActivity, R.drawable.edit_error_bg_grey_radius_10dp)
         }
+    }
+
+    private fun updateProgressMessageUi(message: String) {
+        Toast.makeText(this@SignUpActivity, message, Toast.LENGTH_SHORT).show()
+        binding.progressConst.visibility = View.GONE
     }
 
     override fun onDestroy() {
