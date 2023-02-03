@@ -1,61 +1,54 @@
 package com.jiwondev.trep.ui.activity
 
-import android.content.Context
+import android.R.attr
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
-import androidx.core.widget.addTextChangedListener
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ui.PlayerView
-import com.jiwondev.trep.R
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.jiwondev.trep.data.datasource.AuthLocalDataSource
 import com.jiwondev.trep.data.datasource.AuthRemoteDataSource
 import com.jiwondev.trep.data.repository.AuthRepository
 import com.jiwondev.trep.databinding.ActivityIntroBinding
-import com.jiwondev.trep.model.dto.LoginResponse
 import com.jiwondev.trep.resource.App.Companion.coroutineDispatcher
 import com.jiwondev.trep.resource.App.Companion.dataStore
 import com.jiwondev.trep.resource.Constant.Companion.SUCCESS
 import com.jiwondev.trep.resource.Constant.Companion.U01_404
 import com.jiwondev.trep.resource.Constant.Companion.U02_400
-import com.jiwondev.trep.resource.PreferencesKeys
 import com.jiwondev.trep.resource.Utils
 import com.jiwondev.trep.ui.viewmodel.AuthViewModel
 import com.jiwondev.trep.ui.viewmodel.AuthViewModelFactory
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.map
-import java.io.ByteArrayInputStream
-import java.io.FileOutputStream
-import java.io.InputStream
-import kotlin.properties.Delegates
+import kotlinx.coroutines.launch
 
 
 class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.inflate(it)}) {
+    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestEmail()
+        .build()
+
+    lateinit var mGoogleSignInClient: GoogleSignInClient
     lateinit var viewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
         clickListener()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
     }
 
     private fun init() {
@@ -137,6 +130,36 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
 
         binding.forgotTextView.setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
+        }
+
+        binding.googleLoginButton.setOnClickListener {
+            // TODO : ActivityResultContrant로 Migration
+            val signInIntent: Intent = mGoogleSignInClient.getSignInIntent()
+            startActivityForResult(signInIntent, 1001)
+        }
+    }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+
+            // Signed in successfully, show authenticated UI.
+            Log.d("account : ", account.toString())
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.d("ApiException", "signInResult:failed code=" + e.statusCode)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1001) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
         }
     }
 }
