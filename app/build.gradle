@@ -89,4 +89,12 @@ dependencies {
 
     // Google Login
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // KakaoLogin
+    implementation "com.kakao.sdk:v2-user:2.12.1"
+
 }

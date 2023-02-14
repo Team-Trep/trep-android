@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "995999584810",
+    "project_id": "trep-f1ab8",
+    "storage_bucket": "trep-f1ab8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995999584810:android:6b8800cbbe5dc6cb852953",
+        "android_client_info": {
+          "package_name": "com.jiwondev.trep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "995999584810-7rrnheflchsldth72q37mm6enne6jue7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jiwondev.trep",
+            "certificate_hash": "b2f3e34f8e02d15beb0d10d3d48a05148e943642"
+          }
+        },
+        {
+          "client_id": "995999584810-itgrsm5se47musslena9rncmd73aivmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcsIInAcKaJyYuGkh417jK1N9g_W11EsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "995999584810-itgrsm5se47musslena9rncmd73aivmc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

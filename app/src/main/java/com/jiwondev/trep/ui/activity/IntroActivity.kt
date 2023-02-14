@@ -30,6 +30,7 @@ import com.jiwondev.trep.resource.Constant.Companion.U02_400
 import com.jiwondev.trep.resource.Utils
 import com.jiwondev.trep.ui.viewmodel.AuthViewModel
 import com.jiwondev.trep.ui.viewmodel.AuthViewModelFactory
+import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -136,6 +137,17 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>({ ActivityIntroBinding.
             // TODO : ActivityResultContrant로 Migration
             val signInIntent: Intent = mGoogleSignInClient.getSignInIntent()
             startActivityForResult(signInIntent, 1001)
+        }
+
+        binding.kakaoLoginButton.setOnClickListener {
+            UserApiClient.instance.loginWithKakaoAccount(this) { token, error ->
+                if (error != null) {
+                    Log.e("로그인 실패 : ", "로그인 실패", error)
+                }
+                else if (token != null) {
+                    Log.i("로그인 성공 : ", "로그인 성공 ${token.accessToken}")
+                }
+            }
         }
     }
 
