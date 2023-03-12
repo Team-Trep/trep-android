@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:navGraph="@navigation/nav_graph"
-        tools:layout="@layout/fragment_feed" />
+        tools:layout="@layout/fragment_map" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
