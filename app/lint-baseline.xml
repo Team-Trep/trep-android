@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 7.1.3" type="baseline" client="gradle" dependencies="false" name="AGP (7.1.3)" variant="fatal" version="7.1.3">
+
+    <issue
+        id="Instantiatable"
+        message="This class should provide a default constructor (a public constructor with no arguments) (`com.jiwondev.trep.ui.activity.BaseActivity`)"
+        errorLine1="            android:name=&quot;.ui.activity.BaseActivity&quot;"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="55"
+            column="27"/>
+    </issue>
+
+</issues>

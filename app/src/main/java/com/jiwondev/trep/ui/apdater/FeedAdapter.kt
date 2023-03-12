@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.jiwondev.trep.databinding.FeedItemBinding
-import com.jiwondev.trep.ui.fragment.FeedFragment
+import com.jiwondev.trep.ui.fragment.MapFragment
 
 // TODO : Pager 라이브러리 사용
 
 class FeedAdapter(
     private val feedList: ArrayList<String>,
-    private val fragment: FeedFragment
+    private val fragment: MapFragment
     ) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder =

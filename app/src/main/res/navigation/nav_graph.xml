@@ -8,7 +8,7 @@
     <fragment
         android:label="fragment_feed"
         android:id="@+id/feedFragment"
-        android:name="com.jiwondev.trep.ui.fragment.FeedFragment"
+        android:name="com.jiwondev.trep.ui.fragment.MapFragment"
         tools:layout="@layout/fragment_feed">
     </fragment>
 

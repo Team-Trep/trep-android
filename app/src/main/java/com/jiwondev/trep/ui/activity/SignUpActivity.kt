@@ -109,8 +109,6 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
             }
         })
 
-
-
         binding.backButton.setOnClickListener {
 
         }
@@ -201,8 +199,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>({ActivitySignUpBindin
                                 Toast.makeText(this@SignUpActivity, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT).show()
                                 binding.nicknameErrorTextView.visibility = View.VISIBLE
                                 binding.signUpNicknameEditTextView.background = AppCompatResources.getDrawable(this@SignUpActivity, R.drawable.edit_error_bg_grey_radius_10dp)
-
                             }
+
                             U05_400 -> Toast.makeText(this@SignUpActivity, "정보를 입력해주세요.", Toast.LENGTH_SHORT).show() // 회원가입 데이터 없음
                             U06_400 -> Toast.makeText(this@SignUpActivity, "이미 가입된 회원입니다.", Toast.LENGTH_SHORT).show()
                             E04_400 -> Toast.makeText(this@SignUpActivity, "이메일을 인증해주세요.", Toast.LENGTH_SHORT).show()
